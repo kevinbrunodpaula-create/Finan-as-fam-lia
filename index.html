@@ -40,6 +40,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .login-btn:hover{opacity:.85}
 .login-err{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);margin-top:10px;min-height:16px}
 .login-hint{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:16px;line-height:1.7}
+.login-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.login-bio-btn{width:100%;padding:13px;border-radius:10px;border:1px solid rgba(0,229,160,.3);background:var(--gdim);color:var(--green);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px}
+.login-bio-btn:hover{background:rgba(0,229,160,.2)}
+.login-bio-btn:disabled{opacity:.6;cursor:default}
+.bio-emoji{font-size:18px}
 
 /* SYNC STATUS */
 .sync-bar{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
@@ -429,6 +435,12 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   <div class="login-box">
     <div class="login-logo">Fluxo<span>Caixa</span></div>
     <div class="login-sub">acesso familiar · kevin & aline</div>
+
+    <button class="login-bio-btn" id="bioBtn" onclick="doBiometricLogin()" style="display:none;margin-bottom:14px">
+      <span class="bio-emoji">👆</span> Entrar com biometria
+    </button>
+    <div class="login-divider" id="bioDivider" style="display:none">ou use a senha</div>
+
     <div class="login-input-wrap">
       <input type="password" class="login-input" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="login-eye" onclick="togglePass()" id="eyeBtn" type="button">ver</button>
@@ -436,6 +448,19 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
     <button class="login-btn" onclick="doLogin()">Entrar</button>
     <div class="login-err" id="loginErr"></div>
     <div class="login-hint">acesso compartilhado · sincronizado em tempo real</div>
+  </div>
+</div>
+
+<!-- MODAL: OFERTA DE BIOMETRIA -->
+<div class="moverlay" id="bioOfferOverlay">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <div style="font-size:42px;margin-bottom:14px">👆</div>
+    <h3 style="margin-bottom:8px">Ativar acesso por biometria?</h3>
+    <div class="msub" style="margin-bottom:8px">Use sua digital ou Face ID para entrar mais rápido neste aparelho, sem precisar digitar a senha toda vez.</div>
+    <div class="brow">
+      <button class="bcancel" onclick="skipBiometric()">Agora não</button>
+      <button class="bsave" onclick="setupBiometric()">Ativar</button>
+    </div>
   </div>
 </div>
 
@@ -447,6 +472,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
     <button class="export-btn" onclick="exportCSV()">&#x2193; CSV</button>
     <button class="export-btn" onclick="openImport()" style="background:rgba(91,141,238,.12);border-color:rgba(91,141,238,.25);color:var(--blue)">&#x2191; Extrato</button>
     <button class="alert-btn" onclick="toggleAlertas()" id="alertBtn" title="Alertas">🔔</button>
+    <button class="alert-btn" onclick="manageBiometric()" id="bioMngBtn" title="Gerenciar biometria">👆</button>
     <button class="danger-btn" onclick="limparTudo()" title="Apagar todos os dados e comecar do zero">🗑 Limpar Tudo</button>
     <div class="hdate" id="hdate"></div>
     <button class="logout-btn" onclick="doLogout()">sair</button>
@@ -1119,13 +1145,112 @@ function togglePass(){
   if(inp.type==='password'){ inp.type='text'; btn.textContent='ocultar'; }
   else { inp.type='password'; btn.textContent='ver'; }
 }
+
+// ═══════════════════════════════════════════════════
+//  BIOMETRIA (WebAuthn — digital / Face ID)
+// ═══════════════════════════════════════════════════
+const WEBAUTHN_KEY = 'fc_webauthn_cred';
+
+function webauthnSupported(){
+  return !!(window.PublicKeyCredential && navigator.credentials);
+}
+
+async function registerBiometric(){
+  try{
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const userId = crypto.getRandomValues(new Uint8Array(16));
+    const cred = await navigator.credentials.create({
+      publicKey: {
+        challenge,
+        rp: { name: 'FluxoCaixa' },
+        user: { id: userId, name: 'familia', displayName: 'Kevin & Aline' },
+        pubKeyCredParams: [{type:'public-key', alg:-7},{type:'public-key', alg:-257}],
+        authenticatorSelection: { authenticatorAttachment:'platform', userVerification:'required', residentKey:'preferred' },
+        timeout: 60000,
+        attestation: 'none'
+      }
+    });
+    if(cred && cred.rawId){
+      const credId = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
+      localStorage.setItem(WEBAUTHN_KEY, credId);
+      return true;
+    }
+  }catch(e){ console.warn('WebAuthn register error:', e); }
+  return false;
+}
+
+async function loginWithBiometric(){
+  const credId = localStorage.getItem(WEBAUTHN_KEY);
+  if(!credId) return false;
+  try{
+    const challenge = crypto.getRandomValues(new Uint8Array(32));
+    const idBytes = Uint8Array.from(atob(credId), c=>c.charCodeAt(0));
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge,
+        allowCredentials: [{id: idBytes, type:'public-key'}],
+        userVerification: 'required',
+        timeout: 60000
+      }
+    });
+    return !!assertion;
+  }catch(e){ console.warn('WebAuthn get error:', e); }
+  return false;
+}
+
+async function doBiometricLogin(){
+  const btn=$('bioBtn');
+  btn.disabled=true; btn.innerHTML='<span class="bio-emoji">👆</span> Verificando…';
+  const ok = await loginWithBiometric();
+  if(ok){
+    enterApp();
+  } else {
+    $('loginErr').textContent = 'Biometria não reconhecida. Use a senha.';
+    btn.innerHTML='<span class="bio-emoji">👆</span> Entrar com biometria';
+    btn.disabled=false;
+  }
+}
+
+function skipBiometric(){
+  $('bioOfferOverlay').classList.remove('open');
+}
+async function setupBiometric(){
+  $('bioOfferOverlay').classList.remove('open');
+  const ok = await registerBiometric();
+  if(ok) alert('✓ Biometria ativada! Na próxima vez, você pode entrar com sua digital ou Face ID neste aparelho.');
+  else alert('Não foi possível ativar a biometria neste aparelho. Você pode tentar de novo a qualquer momento pelo botão 👆 no topo do app.');
+}
+
+async function manageBiometric(){
+  if(!webauthnSupported()){ alert('Este navegador/aparelho não suporta biometria (digital ou Face ID).'); return; }
+  if(localStorage.getItem(WEBAUTHN_KEY)){
+    if(confirm('Remover o acesso por biometria deste aparelho?\n\nVocê voltará a usar a senha para entrar.')){
+      localStorage.removeItem(WEBAUTHN_KEY);
+      alert('Biometria removida deste aparelho.');
+    }
+  } else {
+    if(confirm('Ativar acesso por digital/Face ID neste aparelho?')){
+      const ok = await registerBiometric();
+      alert(ok ? '✓ Biometria ativada!' : 'Não foi possível ativar a biometria.');
+    }
+  }
+}
+
+// ─ LOGIN/LOGOUT ─
+function enterApp(){
+  $('loginScreen').style.display = 'none';
+  $('mainApp').style.display = 'block';
+  sessionStorage.setItem('fc_auth','1');
+  init();
+}
 function doLogin(){
   const pass = $('loginPass').value;
   if(pass === FAMILY_PASS){
-    $('loginScreen').style.display = 'none';
-    $('mainApp').style.display = 'block';
-    sessionStorage.setItem('fc_auth','1');
-    init();
+    enterApp();
+    // Oferece ativar biometria se o aparelho suportar e ainda não tiver sido configurada
+    if(webauthnSupported() && !localStorage.getItem(WEBAUTHN_KEY)){
+      setTimeout(()=>{ $('bioOfferOverlay').classList.add('open'); }, 700);
+    }
   } else {
     $('loginErr').textContent = 'Senha incorreta. Tente novamente.';
     $('loginPass').style.borderColor = 'var(--red)';
@@ -1231,6 +1356,11 @@ async function init(){
 
 // ─ STARTUP ─
 window.addEventListener('DOMContentLoaded', ()=>{
+  // Mostra o botão de biometria se já estiver configurado neste aparelho
+  if(webauthnSupported() && localStorage.getItem(WEBAUTHN_KEY)){
+    $('bioBtn').style.display='flex';
+    $('bioDivider').style.display='flex';
+  }
   if(sessionStorage.getItem('fc_auth')==='1'){
     $('loginScreen').style.display='none';
     $('mainApp').style.display='block';
