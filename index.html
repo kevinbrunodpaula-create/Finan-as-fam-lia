@@ -44,12 +44,14 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .logout-btn:hover{border-color:var(--red);color:var(--red)}
 .export-btn{padding:5px 12px;border-radius:7px;background:var(--gdim);border:1px solid rgba(0,229,160,.25);color:var(--green);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s}
 .export-btn:hover{background:rgba(0,229,160,.2)}
+.danger-btn{padding:5px 12px;border-radius:7px;background:var(--rdim);border:1px solid rgba(255,77,109,.25);color:var(--red);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s}
+.danger-btn:hover{background:rgba(255,77,109,.22)}
 
 /* PAGE TABS */
 .ptabs{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px}
 .ptab{flex:1;padding:9px 4px;border-radius:8px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
 .ptab.active{background:var(--surface2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.ptab.pd.active{color:var(--red)}.ptab.pi.active{color:var(--teal)}.ptab.pg.active{color:var(--orange)}
+.ptab.pd.active{color:var(--red)}.ptab.pi.active{color:var(--teal)}.ptab.pg.active{color:var(--orange)}.ptab.pr.active{color:var(--purple)}
 .psec{display:none}.psec.active{display:block}
 
 /* MONTH */
@@ -82,7 +84,45 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .pfill{height:100%;border-radius:2px;transition:width .6s ease}
 .kcard.g .pfill{background:var(--green)}.kcard.y .pfill{background:var(--yellow)}
 
-/* FILTER */
+/* REFORMA */
+.ref-etapas{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:20px}
+@media(min-width:700px){.ref-etapas{grid-template-columns:repeat(3,1fr)}}
+.ref-etapa-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 15px;position:relative;overflow:hidden;cursor:pointer;transition:all .15s}
+.ref-etapa-card:hover{border-color:var(--purple);transform:translateY(-1px)}
+.ref-etapa-card.sel{border-color:var(--purple);background:var(--pdim)}
+.ref-etapa-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--purple)}
+.ref-etapa-name{font-size:12px;font-weight:700;margin-bottom:2px}
+.ref-etapa-orcado{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:7px}
+.ref-etapa-gasto{font-size:15px;font-weight:700;color:var(--purple);letter-spacing:-.3px}
+.ref-etapa-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:7px;overflow:hidden}
+.ref-etapa-fill{height:100%;border-radius:2px;background:var(--purple);transition:width .5s}
+.ref-etapa-fill.over{background:var(--red)}
+.ref-etapa-pct{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:3px}
+.ref-forn-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:18px}
+@media(min-width:700px){.ref-forn-grid{grid-template-columns:repeat(3,1fr)}}
+.ref-forn-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 14px}
+.ref-forn-name{font-size:12px;font-weight:700;margin-bottom:2px}
+.ref-forn-tipo{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px}
+.ref-forn-total{font-size:14px;font-weight:700;color:var(--purple)}
+.ref-forn-pago{font-family:'DM Mono',monospace;font-size:10px;color:var(--green);margin-top:2px}
+.ref-forn-pend{font-family:'DM Mono',monospace;font-size:10px;color:var(--red)}
+.ref-forn-actions{display:flex;gap:5px;margin-top:8px}
+.ref-tx-list{padding:4px 0;max-height:320px;overflow-y:auto}
+.ref-tx-list::-webkit-scrollbar{width:4px}.ref-tx-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ref-tx-item{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.025)}
+.ref-tx-item:last-child{border-bottom:none}
+.ref-tx-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);flex-shrink:0}
+.ref-tx-info{flex:1;min-width:0}
+.ref-tx-desc{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ref-tx-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px}
+.ref-tx-amt{font-family:'DM Mono',monospace;font-size:12px;color:var(--purple);white-space:nowrap}
+.ref-orcamento-bar{width:100%;height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin:10px 0 5px}
+.ref-orcamento-fill{height:100%;border-radius:4px;background:var(--purple);transition:width .6s}
+.ref-orcamento-fill.over{background:var(--red)}
+
+/* OFFLINE BANNER */
+.offline-banner{display:none;align-items:center;gap:8px;background:var(--ydim);border:1px solid rgba(255,209,102,.3);border-radius:9px;padding:9px 14px;margin-bottom:18px;font-family:'DM Mono',monospace;font-size:11px;color:var(--yellow)}
+.offline-banner.show{display:flex}
 .frow{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
 .fbtn{padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
 .fbtn:hover{border-color:var(--sub);color:var(--text)}
@@ -177,12 +217,13 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .acct-prefix{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted)}
 .acct-input{background:transparent;border:none;outline:none;font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--text);width:100%;min-width:80px}
 .acct-divider{display:none}
-.acct-stats-row{display:flex;gap:20px;width:100%}
-.acct-stat{display:flex;flex-direction:column;gap:2px;flex:1}
+.acct-stats-row{display:flex;gap:16px;width:100%;flex-wrap:wrap}
+.acct-stat{display:flex;flex-direction:column;gap:2px;flex:1;min-width:120px}
 .acct-stat-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 .acct-stat-val{font-size:15px;font-weight:800;letter-spacing:-.3px}
 .acct-real.pos{color:var(--green)}.acct-real.neg{color:var(--red)}
 .acct-info{display:none}
+.acct-bar-row .acct-label{margin-bottom:6px}
 
 /* STATUS FIXAS */
 .fix-item{display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid rgba(255,255,255,.025)}
@@ -310,9 +351,50 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .pinamer{color:var(--red)}.pinamet{color:var(--teal)}
 .pidet{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted)}
 
-/* OFFLINE BANNER */
-.offline-banner{display:none;align-items:center;gap:8px;background:var(--ydim);border:1px solid rgba(255,209,102,.3);border-radius:9px;padding:9px 14px;margin-bottom:18px;font-family:'DM Mono',monospace;font-size:11px;color:var(--yellow)}
-.offline-banner.show{display:flex}
+/* ALERT BELL */
+.alert-btn{background:none;border:none;font-size:16px;cursor:pointer;padding:4px 6px;border-radius:7px;transition:background .15s;position:relative}
+.alert-btn:hover{background:rgba(255,255,255,.06)}
+.alert-badge{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:var(--red);display:none}
+.alert-badge.show{display:block}
+
+/* ALERTAS PANEL */
+.alertas-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:18px;display:none}
+.alertas-panel.show{display:block}
+.alertas-title{font-size:12px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.alertas-config{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.alertas-config label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.alertas-config input[type=number]{background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 9px;outline:none;width:90px}
+.alertas-config input[type=number]:focus{border-color:var(--green)}
+.alertas-list{display:flex;flex-direction:column;gap:6px}
+.alerta-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;font-size:12px}
+.alerta-item.warn{background:var(--ydim);border:1px solid rgba(255,209,102,.2)}
+.alerta-item.danger{background:var(--rdim);border:1px solid rgba(255,77,109,.2)}
+.alerta-item.ok{background:var(--gdim);border:1px solid rgba(0,229,160,.15)}
+.alerta-icon{font-size:14px;flex-shrink:0}
+.alerta-txt{flex:1;line-height:1.4}
+.alerta-txt strong{display:block;font-weight:700}
+.alerta-txt span{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.notif-btn{padding:5px 12px;border-radius:7px;font-size:10px;font-weight:600;font-family:'Syne',sans-serif;cursor:pointer;background:var(--gdim);color:var(--green);border:1px solid rgba(0,229,160,.25);white-space:nowrap}
+
+/* IMPORT MODAL */
+.import-drop{border:2px dashed var(--border);border-radius:12px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.import-drop:hover,.import-drop.drag{border-color:var(--blue);background:var(--bdim)}
+.import-drop-icon{font-size:28px;margin-bottom:8px}
+.import-drop-txt{font-size:13px;font-weight:600;margin-bottom:4px}
+.import-drop-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.import-preview{max-height:260px;overflow-y:auto;margin-bottom:14px}
+.import-preview::-webkit-scrollbar{width:4px}.import-preview::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.import-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.import-row:last-child{border-bottom:none}
+.import-chk{flex-shrink:0;accent-color:var(--green);width:15px;height:15px;cursor:pointer}
+.import-info{flex:1;min-width:0}
+.import-desc{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.import-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.import-amt{font-family:'DM Mono',monospace;font-size:12px;white-space:nowrap;margin-right:6px}
+.import-cat-sel{background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;padding:3px 6px;outline:none;max-width:130px}
+.import-stats{display:flex;gap:14px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:11px}
+.import-stats span{padding:4px 10px;border-radius:6px}
+.is-in{background:var(--gdim);color:var(--green)}.is-out{background:var(--rdim);color:var(--red)}.is-tot{background:rgba(255,255,255,.05);color:var(--sub)}
 </style>
 </head>
 <body>
@@ -338,6 +420,9 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   <div class="hright">
     <div class="sync-bar"><div class="sync-dot" id="syncDot"></div><span id="syncLbl">conectando…</span></div>
     <button class="export-btn" onclick="exportCSV()">&#x2193; CSV</button>
+    <button class="export-btn" onclick="openImport()" style="background:rgba(91,141,238,.12);border-color:rgba(91,141,238,.25);color:var(--blue)">&#x2191; Extrato</button>
+    <button class="alert-btn" onclick="toggleAlertas()" id="alertBtn" title="Alertas">🔔</button>
+    <button class="danger-btn" onclick="limparTudo()" title="Apagar todos os dados e comecar do zero">🗑 Limpar Tudo</button>
     <div class="hdate" id="hdate"></div>
     <button class="logout-btn" onclick="doLogout()">sair</button>
   </div>
@@ -345,11 +430,28 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 
 <div class="offline-banner" id="offlineBanner">⚡ Modo offline — dados salvos localmente, sincronizarão quando voltar a internet.</div>
 
+<!-- ALERTAS PANEL -->
+<div class="alertas-panel" id="alertasPanel">
+  <div class="alertas-title">
+    <span>🔔 Central de Alertas</span>
+    <button class="notif-btn" id="notifBtn" onclick="pedirNotificacao()">Ativar notificações</button>
+  </div>
+  <div class="alertas-config">
+    <label>Alertar saldo abaixo de R$</label>
+    <input type="number" id="alertSaldo" value="500" step="100" oninput="salvarConfigAlerta()">
+    <label>e fixas vencendo em</label>
+    <input type="number" id="alertDias" value="3" step="1" min="1" max="10" oninput="salvarConfigAlerta()">
+    <label>dias</label>
+  </div>
+  <div class="alertas-list" id="alertasList"></div>
+</div>
+
 <div class="ptabs">
   <button class="ptab active" onclick="setPage('fluxo',this)">💰 Fluxo</button>
   <button class="ptab pg"     onclick="setPage('gastos',this)">📆 Gastos</button>
   <button class="ptab pd"     onclick="setPage('dividas',this)">🔴 Dívidas</button>
   <button class="ptab pi"     onclick="setPage('invest',this)">📈 Invest.</button>
+  <button class="ptab pr"     onclick="setPage('reforma',this)">🏗️ Reforma</button>
 </div>
 
 <!-- PAGE FLUXO -->
@@ -362,19 +464,38 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
     <div id="stag"></div>
   </div>
   <div class="acct-bar">
-    <div class="acct-label">🏦 Saldo na Conta</div>
-    <div class="acct-input-wrap">
-      <span class="acct-prefix">R$</span>
-      <input type="number" class="acct-input" id="acctInput" placeholder="0,00" step="0.01" oninput="saveAcct()">
+    <div class="acct-bar-row">
+      <div style="flex:1;min-width:140px">
+        <div class="acct-label">🏦 Saldo na Conta</div>
+        <div class="acct-input-wrap">
+          <span class="acct-prefix">R$</span>
+          <input type="number" class="acct-input" id="acctInput" placeholder="0,00" step="0.01" oninput="saveAcct()">
+        </div>
+      </div>
+      <div style="flex:1;min-width:140px">
+        <div class="acct-label">🛟 Reserva de Emergência</div>
+        <div class="acct-input-wrap">
+          <span class="acct-prefix">R$</span>
+          <input type="number" class="acct-input" id="reserveInput" placeholder="0,00" step="0.01" oninput="saveReserve()">
+        </div>
+      </div>
     </div>
     <div class="acct-stats-row">
       <div class="acct-stat">
-        <div class="acct-stat-lbl">Saldo Real Hoje</div>
+        <div class="acct-stat-lbl">Saldo Disponível</div>
         <div class="acct-stat-val acct-real" id="acctReal">R$ 0</div>
       </div>
       <div class="acct-stat">
         <div class="acct-stat-lbl">Após Pagar Pendentes</div>
         <div class="acct-stat-val" id="acctAfter" style="color:var(--blue)">R$ 0</div>
+      </div>
+      <div class="acct-stat">
+        <div class="acct-stat-lbl">Cobertura Fixas</div>
+        <div class="acct-stat-val" id="acctCobertura">— meses</div>
+      </div>
+      <div class="acct-stat">
+        <div class="acct-stat-lbl">Comprometimento</div>
+        <div class="acct-stat-val" id="acctComprom">0%</div>
       </div>
     </div>
   </div>
@@ -508,6 +629,50 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
     <div class="ihist" id="iHistList"></div>
   </div>
 </div>
+<!-- PAGE REFORMA -->
+<div class="psec" id="page-reforma">
+  <div class="pghead">
+    <div><div class="pghead-title">🏗️ Reforma do Apartamento</div><div class="pghead-sub" id="refSubtitle">Carregando…</div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="pact" style="background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.3)" onclick="openRefGasto()">+ Gasto</button>
+      <button class="pact" style="background:rgba(255,255,255,.04);color:var(--sub);border:1px solid var(--border)" onclick="openRefForn()">+ Fornecedor</button>
+      <button class="pact" style="background:rgba(255,255,255,.04);color:var(--sub);border:1px solid var(--border)" onclick="openRefEtapa()">+ Etapa</button>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kgrid" style="grid-template-columns:repeat(2,1fr);margin-bottom:20px" id="refKpis">
+    <div class="kcard p"><div class="klbl">Orçamento Total</div><div class="kval" id="refKOrc">R$ 0</div><div class="ksub">definido por etapa</div></div>
+    <div class="kcard p"><div class="klbl">Total Gasto</div><div class="kval" id="refKGasto">R$ 0</div><div class="ksub" id="refKGastoS">0 lançamentos</div></div>
+    <div class="kcard g"><div class="klbl">Saldo Disponível</div><div class="kval" id="refKSaldo">R$ 0</div><div class="ksub">orçamento − gasto</div></div>
+    <div class="kcard r"><div class="klbl">Fornecedores Pendentes</div><div class="kval" id="refKPend">R$ 0</div><div class="ksub" id="refKPendS">a pagar</div></div>
+  </div>
+
+  <!-- Barra geral -->
+  <div class="panel" style="margin-bottom:18px">
+    <div class="ph"><div class="ptitle">Progresso Geral da Reforma</div><div id="refPct" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--purple)">0%</div></div>
+    <div style="padding:14px 16px">
+      <div class="ref-orcamento-bar"><div class="ref-orcamento-fill" id="refBarFill" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">
+        <span id="refBarLeft">R$ 0 gasto</span><span id="refBarRight">de R$ 0 orçados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Etapas -->
+  <div class="sec-ttl">ETAPAS</div>
+  <div class="ref-etapas" id="refEtapas"></div>
+
+  <!-- Fornecedores -->
+  <div class="sec-ttl">FORNECEDORES</div>
+  <div class="ref-forn-grid" id="refForns"></div>
+
+  <!-- Lançamentos -->
+  <div class="panel">
+    <div class="ph"><div class="ptitle" id="refTxTitle">Todos os Gastos</div></div>
+    <div class="ref-tx-list" id="refTxList"></div>
+  </div>
+</div>
 </div><!-- /app -->
 
 <!-- MODAL: LANCAMENTO (novo + edição) -->
@@ -605,6 +770,103 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   </div>
 </div>
 
+<!-- MODAL: PAGAMENTO FORNECEDOR -->
+<div class="moverlay" id="mPagarForn">
+  <div class="modal">
+    <button class="xbtn" onclick="closeMPagarForn()">&#x2715;</button>
+    <h3>Registrar Pagamento</h3>
+    <div class="msub">O valor será lançado como gasto da etapa selecionada</div>
+    <div class="pinfo pinfor" style="margin-bottom:16px">
+      <div class="piname pinamer" id="pfNome"></div>
+      <div class="pidet" id="pfDet"></div>
+    </div>
+    <div class="frow2">
+      <div><label class="flabel">Valor pago (R$)</label><input type="number" class="finput" id="pfVal" step="0.01" min="0"></div>
+      <div><label class="flabel">Data</label><input type="date" class="finput" id="pfData"></div>
+    </div>
+    <div class="fmb"><label class="flabel">Vincular à Etapa</label><select class="fselect" id="pfEtapa"></select></div>
+    <div class="fmb"><label class="flabel">Observação (opcional)</label><input type="text" class="finput" id="pfObs" placeholder="Ex: parcela 1/2, recibo…"></div>
+    <div class="brow">
+      <button class="bcancel" onclick="closeMPagarForn()">Cancelar</button>
+      <button class="bsave" style="background:var(--purple);color:#fff" onclick="confirmPagarForn()">Confirmar Pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GASTO REFORMA -->
+<div class="moverlay" id="mRefGasto">
+  <div class="modal">
+    <button class="xbtn" onclick="closeRefGasto()">&#x2715;</button>
+    <h3 id="refGastoTitle">Novo Gasto de Reforma</h3>
+    <div class="msub">Lançado na etapa selecionada</div>
+    <div class="fmb"><label class="flabel">Descrição</label><input type="text" class="finput" id="rgDesc" placeholder="Ex: Cerâmica banheiro, Porta madeira…"></div>
+    <div class="frow2">
+      <div><label class="flabel">Valor (R$)</label><input type="number" class="finput" id="rgVal" placeholder="0,00" step="0.01" min="0"></div>
+      <div><label class="flabel">Data</label><input type="date" class="finput" id="rgData"></div>
+    </div>
+    <div class="frow2">
+      <div><label class="flabel">Etapa</label><select class="fselect" id="rgEtapa"></select></div>
+      <div><label class="flabel">Fornecedor (opcional)</label><select class="fselect" id="rgForn"><option value="">— Nenhum —</option></select></div>
+    </div>
+    <div class="fmb"><label class="flabel">Observação (opcional)</label><input type="text" class="finput" id="rgObs" placeholder="Ex: parcela 1/3, nota fiscal…"></div>
+    <div class="brow"><button class="bcancel" onclick="closeRefGasto()">Cancelar</button><button class="bsave" style="background:var(--purple);color:#fff" id="rgSaveBtn" onclick="saveRefGasto()">Salvar Gasto</button></div>
+  </div>
+</div>
+
+<!-- MODAL: FORNECEDOR REFORMA -->
+<div class="moverlay" id="mRefForn">
+  <div class="modal">
+    <button class="xbtn" onclick="closeRefForn()">&#x2715;</button>
+    <h3>Novo Fornecedor</h3>
+    <div class="msub">Pedreiro, loja, marceneiro, elétrica…</div>
+    <div class="fmb"><label class="flabel">Nome</label><input type="text" class="finput" id="rfNome" placeholder="Ex: Marcenaria Silva, Loja Leroy…"></div>
+    <div class="fmb"><label class="flabel">Tipo</label>
+      <select class="fselect" id="rfTipo">
+        <option>Mão de obra</option><option>Material</option><option>Móveis</option><option>Eletrodoméstico</option><option>Elétrica / Hidráulica</option><option>Pintura</option><option>Revestimento</option><option>Outros</option>
+      </select>
+    </div>
+    <div class="frow2">
+      <div><label class="flabel">Valor Combinado (R$)</label><input type="number" class="finput" id="rfTotal" placeholder="0,00" step="0.01" min="0" value="0"></div>
+      <div><label class="flabel">Já pago (R$)</label><input type="number" class="finput" id="rfPago" placeholder="0,00" step="0.01" min="0" value="0"></div>
+    </div>
+    <div class="fmb"><label class="flabel">Contato / Observação</label><input type="text" class="finput" id="rfContato" placeholder="Telefone, nome completo…"></div>
+    <div class="brow"><button class="bcancel" onclick="closeRefForn()">Cancelar</button><button class="bsave" style="background:var(--purple);color:#fff" onclick="saveRefForn()">Salvar Fornecedor</button></div>
+  </div>
+</div>
+
+<!-- MODAL: ETAPA REFORMA -->
+<div class="moverlay" id="mRefEtapa">
+  <div class="modal">
+    <button class="xbtn" onclick="closeRefEtapa()">&#x2715;</button>
+    <h3>Nova Etapa</h3>
+    <div class="msub">Estrutura, elétrica, hidráulica, revestimento…</div>
+    <div class="fmb"><label class="flabel">Nome da Etapa</label><input type="text" class="finput" id="reNome" placeholder="Ex: Elétrica, Revestimento, Móveis…"></div>
+    <div class="fmb"><label class="flabel">Orçamento previsto (R$)</label><input type="number" class="finput" id="reOrc" placeholder="0,00" step="0.01" min="0" value="0"></div>
+    <div class="brow"><button class="bcancel" onclick="closeRefEtapa()">Cancelar</button><button class="bsave" style="background:var(--purple);color:#fff" onclick="saveRefEtapa()">Criar Etapa</button></div>
+  </div>
+</div>
+
+<!-- MODAL: IMPORTAR EXTRATO -->
+<div class="moverlay" id="mImport">
+  <div class="modal" style="max-width:540px">
+    <button class="xbtn" onclick="closeImport()">&#x2715;</button>
+    <h3>📂 Importar Extrato</h3>
+    <div class="msub">OFX (banco) ou CSV — detectado automaticamente</div>
+    <div class="import-drop" id="importDrop" onclick="$('importFile').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+      <div class="import-drop-icon">📄</div>
+      <div class="import-drop-txt">Arraste o arquivo ou clique para selecionar</div>
+      <div class="import-drop-sub">Nubank · Itaú · Bradesco · Santander · Inter · qualquer OFX ou CSV</div>
+    </div>
+    <input type="file" id="importFile" accept=".ofx,.csv,.OFX,.CSV" style="display:none" onchange="handleImportFile(this.files[0])">
+    <div id="importStats" class="import-stats" style="display:none"></div>
+    <div id="importPreview" class="import-preview" style="display:none"></div>
+    <div class="brow" id="importActions" style="display:none">
+      <button class="bcancel" onclick="closeImport()">Cancelar</button>
+      <button class="bsave" onclick="confirmarImport()">✓ Importar Selecionados</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════
 //  CONFIG
@@ -637,6 +899,37 @@ async function sbDelete(table, filter){
 }
 
 // ═══════════════════════════════════════════════════
+//  LIMPAR TUDO (reset completo)
+// ═══════════════════════════════════════════════════
+async function limparTudo(){
+  if(!confirm('⚠️ ATENÇÃO\n\nIsso vai APAGAR PERMANENTEMENTE:\n• Todos os lançamentos (recebimentos, fixas, variáveis, previsões)\n• Status de pagamento das fixas\n• Dívidas e investimentos\n• Saldo da conta e reserva de emergência\n• Dados da Reforma (etapas, fornecedores, gastos)\n\nIsso afeta TODOS os dispositivos conectados.\n\nDeseja continuar?')) return;
+  if(!confirm('Última confirmação: tem certeza que quer começar do ZERO? Essa ação não pode ser desfeita.')) return;
+
+  // Limpa armazenamento local
+  [KEY,DK,IK,FSK,ACCT_KEY,RESERVE_KEY,RK_ETAPAS,RK_FORNS,RK_GASTOS,
+   'fc_alert_saldo','fc_alert_dias','fc_last_notif'].forEach(k=>localStorage.removeItem(k));
+
+  // Limpa nuvem (Supabase)
+  if(isOnline){
+    setSyncStatus('syncing','limpando dados…');
+    try{
+      await sbDelete('fc_entries','id=neq.__none__');
+      await sbDelete('fc_fix_status','key=neq.__none__');
+      await sbDelete('fc_debts','id=neq.__none__');
+      await sbDelete('fc_invest','id=neq.__none__');
+      await sbDelete('fc_config','key=neq.__none__');
+      setSyncStatus('ok','dados limpos');
+    }catch(e){
+      console.warn('limparTudo cloud error:', e);
+      setSyncStatus('err','erro ao limpar nuvem');
+    }
+  }
+
+  alert('✓ Tudo limpo! A página vai recarregar para começar do zero.');
+  location.reload();
+}
+
+// ═══════════════════════════════════════════════════
 //  SYNC STATE
 // ═══════════════════════════════════════════════════
 let isOnline = navigator.onLine;
@@ -654,7 +947,7 @@ window.addEventListener('offline', () => { isOnline=false; $('offlineBanner').cl
 // ═══════════════════════════════════════════════════
 //  LOCAL STORAGE (cache / offline)
 // ═══════════════════════════════════════════════════
-const KEY='fc_v2', DK='fc_debts', IK='fc_invest', FSK='fc_fixstatus', ACCT_KEY='fc_acct';
+const KEY='fc_v2', DK='fc_debts', IK='fc_invest', FSK='fc_fixstatus', ACCT_KEY='fc_acct', RESERVE_KEY='fc_reserva';
 const ld   = () => { try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]} };
 const sd   = d  => localStorage.setItem(KEY, JSON.stringify(d));
 const ldd  = () => { try{return JSON.parse(localStorage.getItem(DK))||[]}catch{return[]} };
@@ -664,6 +957,7 @@ const sdi  = d  => localStorage.setItem(IK, JSON.stringify(d));
 const ldfs = () => { try{return JSON.parse(localStorage.getItem(FSK))||{}}catch{return{}} };
 const sdfs = d  => localStorage.setItem(FSK, JSON.stringify(d));
 function loadAcct(){ return parseFloat(localStorage.getItem(ACCT_KEY))||0; }
+function loadReserve(){ return parseFloat(localStorage.getItem(RESERVE_KEY))||0; }
 
 // ═══════════════════════════════════════════════════
 //  CLOUD SYNC
@@ -705,11 +999,16 @@ async function syncFromCloud(){
     }));
     sdi(invMapped);
 
-    // config (account balance)
+    // config (account balance + reserva)
     const acctCfg = cfg.find(c=>c.key==='acct_balance');
     if(acctCfg){
       localStorage.setItem(ACCT_KEY, acctCfg.value);
       $('acctInput').value = parseFloat(acctCfg.value)||0;
+    }
+    const reserveCfg = cfg.find(c=>c.key==='reserve_balance');
+    if(reserveCfg){
+      localStorage.setItem(RESERVE_KEY, reserveCfg.value);
+      $('reserveInput').value = parseFloat(reserveCfg.value)||0;
     }
 
     setSyncStatus('ok','sincronizado agora');
@@ -750,9 +1049,11 @@ async function syncToCloud(){
     }));
     if(invest.length) await sbUpsert('fc_invest', invest);
 
-    // Account balance
+    // Account balance + reserva de emergência
     const acct = loadAcct();
     await sbUpsert('fc_config', {key:'acct_balance', value:String(acct)});
+    const reserva = loadReserve();
+    await sbUpsert('fc_config', {key:'reserve_balance', value:String(reserva)});
 
     setSyncStatus('ok','sincronizado agora');
     syncPending = false;
@@ -869,6 +1170,8 @@ async function init(){
 
   const savedAcct = loadAcct();
   if(savedAcct) $('acctInput').value = savedAcct;
+  const savedReserve = loadReserve();
+  if(savedReserve) $('reserveInput').value = savedReserve;
 
   if(isOnline){
     await syncFromCloud();
@@ -877,7 +1180,7 @@ async function init(){
     setSyncStatus('err','offline');
   }
 
-  render(); renderDebts(); renderInvest(); updateAcctBar();
+  render(); renderDebts(); renderInvest(); updateAcctBar(); verificarAlertas();
 
   // Poll every 30s to pick up changes from the other device
   setInterval(async ()=>{
@@ -903,6 +1206,7 @@ function setPage(p,btn){
   if(p==='gastos'){ gdMonth={y:cMonth.y,m:cMonth.m}; renderGastos(); }
   if(p==='dividas') renderDebts();
   if(p==='invest')  renderInvest();
+  if(p==='reforma') renderReforma();
 }
 
 function changeMonth(dir){
@@ -1094,17 +1398,51 @@ function saveAcct(){
   localStorage.setItem(ACCT_KEY,v);
   updateAcctBar(); syncToCloud();
 }
+function saveReserve(){
+  const v=parseFloat($('reserveInput').value)||0;
+  localStorage.setItem(RESERVE_KEY,v);
+  updateAcctBar(); syncToCloud();
+}
 function updateAcctBar(){
-  const acct=loadAcct(), {y,m}=cMonth;
-  const all=mEntries(), fix=all.filter(e=>e.type==='fixed');
+  const acct=loadAcct(), reserva=loadReserve(), {y,m}=cMonth;
+  const all=mEntries(), fix=all.filter(e=>e.type==='fixed'), inc=all.filter(e=>e.type==='income');
+  const tF=fix.reduce((s,e)=>s+e.value,0);
+  const tI=inc.reduce((s,e)=>s+e.value,0);
   const fixPend=fix.filter(e=>getStatus(e.id,y,m)==='pending').reduce((s,e)=>s+e.value,0);
-  const afterPending=acct-fixPend;
+
+  // Saldo disponível = conta − reserva de emergência
+  const disponivel=acct-reserva;
+  const afterPending=disponivel-fixPend;
+
   const realEl=$('acctReal');
-  realEl.textContent=fmt(acct);
-  realEl.className='acct-stat-val acct-real '+(acct>=0?'pos':'neg');
+  realEl.textContent=fmt(disponivel);
+  realEl.className='acct-stat-val acct-real '+(disponivel>=0?'pos':'neg');
+
   const afterEl=$('acctAfter');
   afterEl.textContent=fmt(afterPending);
   afterEl.style.color=afterPending>=0?'var(--blue)':'var(--red)';
+
+  // Cobertura de despesas fixas (em meses)
+  const covEl=$('acctCobertura');
+  if(tF>0){
+    const meses=disponivel/tF;
+    covEl.textContent=meses.toFixed(1).replace('.',',')+' meses';
+    covEl.style.color=meses>=3?'var(--green)':meses>=1?'var(--yellow)':'var(--red)';
+  } else {
+    covEl.textContent='—';
+    covEl.style.color='var(--muted)';
+  }
+
+  // Taxa de comprometimento de renda (fixas / recebido)
+  const cpEl=$('acctComprom');
+  if(tI>0){
+    const pct=tF/tI*100;
+    cpEl.textContent=pct.toFixed(0)+'%';
+    cpEl.style.color=pct<=50?'var(--green)':pct<=70?'var(--yellow)':'var(--red)';
+  } else {
+    cpEl.textContent='—';
+    cpEl.style.color='var(--muted)';
+  }
 }
 
 // ─ MODAL OPEN/EDIT ─
@@ -1420,6 +1758,484 @@ function openIHist(id){
   p.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function closeIHist(){$('iHistPanel').style.display='none';}
+
+// ═══════════════════════════════════════════════════
+//  IMPORTADOR DE EXTRATO (OFX / CSV)
+// ═══════════════════════════════════════════════════
+let importItems = [];
+
+// Mapeamento de palavras-chave → categoria
+const CAT_MAP = [
+  {keys:['uber','99pop','taxi','cabify','idj','ônibus','bus','metro','metrô','transporte'],cat:'Uber / Transporte'},
+  {keys:['ifood','rappi','delivery','pizza','burguer','burger','mcdonalds','mcdonald','subway','lanche'],cat:'Delivery'},
+  {keys:['mercado','supermercado','atacado','carrefour','extra','assaí','assai','wal-mart','walmart','hortifruti','quitanda','sacolão'],cat:'Mercado'},
+  {keys:['farmácia','farmacia','drogaria','droga','ultrafarma','ultragenix','pacheco','nissei'],cat:'Farmácia / Médicos'},
+  {keys:['médico','medico','hospital','clínica','clinica','dentist','odonto','saúde','saude','plano'],cat:'Farmácia / Médicos'},
+  {keys:['padaria','panificadora','café','cafeteria','confeitaria','bakery'],cat:'Panificadora'},
+  {keys:['amazon','shopee','aliexpress','mercadolivre','mercado livre','magazine','americanas','kabum','shein'],cat:'Compras Internet'},
+  {keys:['nubank','itaú','itau','bradesco','santander','banco','caixa','sicoob','sicredi','bancos'],cat:'Empréstimos'},
+  {keys:['netflix','spotify','youtube','disney','hbo','max','globoplay','amazon prime','prime video','deezer','apple','stream'],cat:'Streamings'},
+  {keys:['posto','combustível','combustivel','gasolina','shell','ipiranga','br petrobras'],cat:'Carro'},
+  {keys:['parcelamento','parcela','financ','empréstimo','emprestimo','crédito','credito'],cat:'Empréstimos'},
+  {keys:['salário','salario','pagamento','transferência','transferencia','pix recebido','depósito','deposito'],cat:'Outras entradas'},
+  {keys:['luz','energia','enel','copel','cemig','light ','celesc'],cat:'Luz'},
+  {keys:['internet','vivo','claro','tim','oi ','net ','giga'],cat:'Internet'},
+  {keys:['shopping','cinema','teatro','show','lazer','bar ','balada'],cat:'Lazer'},
+];
+
+function guessCat(desc){
+  const d = desc.toLowerCase();
+  for(const m of CAT_MAP){ if(m.keys.some(k=>d.includes(k))) return m.cat; }
+  return 'Outras entradas';
+}
+
+function guessType(desc, val){
+  const d = desc.toLowerCase();
+  const incomeKeys = ['salário','salario','pagamento recebido','pix recebido','depósito','deposito','transferência recebida','recebido'];
+  if(val > 0 || incomeKeys.some(k=>d.includes(k))) return 'income';
+  return 'variable';
+}
+
+// ── OFX PARSER ──
+function parseOFX(txt){
+  const items=[];
+  const txReg=/<STMTTRN>([\s\S]*?)<\/STMTTRN>/gi;
+  let m;
+  while((m=txReg.exec(txt))!==null){
+    const blk=m[1];
+    const get=(tag)=>{ const r=new RegExp('<'+tag+'>([^<\r\n]+)','i').exec(blk); return r?r[1].trim():''; };
+    const dtRaw=get('DTPOSTED'), amtRaw=get('TRNAMT'), memo=get('MEMO')||get('NAME')||'Sem descrição';
+    if(!dtRaw||!amtRaw) continue;
+    const y=dtRaw.slice(0,4),mo=dtRaw.slice(4,6),d=dtRaw.slice(6,8);
+    const date=`${y}-${mo}-${d}`;
+    const val=parseFloat(amtRaw.replace(',','.'));
+    if(isNaN(val)) continue;
+    items.push({desc:memo, date, value:Math.abs(val), rawVal:val, type:guessType(memo,val), category:guessCat(memo)});
+  }
+  return items;
+}
+
+// ── CSV PARSER ──
+function parseCSV(txt){
+  const lines=txt.split(/\r?\n/).filter(l=>l.trim());
+  if(lines.length<2) return [];
+  const sep=lines[0].includes(';')?';':',';
+  const header=lines[0].split(sep).map(h=>h.replace(/"/g,'').trim().toLowerCase());
+  // detectar colunas
+  const iDate=header.findIndex(h=>h.includes('data')||h.includes('date'));
+  const iDesc=header.findIndex(h=>h.includes('descri')||h.includes('memo')||h.includes('histór')||h.includes('histor')||h.includes('lançamento')||h.includes('lancamento'));
+  const iVal=header.findIndex(h=>h.includes('valor')||h.includes('amount')||h.includes('value'));
+  if(iDate<0||iDesc<0||iVal<0) return [];
+  const items=[];
+  for(let i=1;i<lines.length;i++){
+    const cols=lines[i].split(sep).map(c=>c.replace(/^"|"$/g,'').trim());
+    if(cols.length<3) continue;
+    let dateStr=cols[iDate]||'';
+    // dd/mm/yyyy → yyyy-mm-dd
+    if(dateStr.includes('/')){const p=dateStr.split('/');dateStr=p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');}
+    const rawVal=parseFloat((cols[iVal]||'0').replace(/\./g,'').replace(',','.'));
+    if(isNaN(rawVal)||!dateStr) continue;
+    const desc=(cols[iDesc]||'Sem descrição').substring(0,80);
+    items.push({desc, date:dateStr, value:Math.abs(rawVal), rawVal, type:guessType(desc,rawVal), category:guessCat(desc)});
+  }
+  return items;
+}
+
+function handleDrop(e){
+  e.preventDefault(); $('importDrop').classList.remove('drag');
+  const f=e.dataTransfer.files[0]; if(f) processImportFile(f);
+}
+function handleImportFile(f){ if(f) processImportFile(f); }
+
+function processImportFile(f){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const txt=e.target.result;
+    const isOFX=f.name.toLowerCase().endsWith('.ofx')||txt.includes('<OFX>')||txt.includes('<STMTTRN>');
+    importItems=isOFX?parseOFX(txt):parseCSV(txt);
+    if(!importItems.length){alert('Não consegui ler o arquivo. Tente exportar como OFX ou CSV do seu banco.');return;}
+    renderImportPreview();
+  };
+  reader.readAsText(f,'ISO-8859-1');
+}
+
+function renderImportPreview(){
+  const totalIn=importItems.filter(i=>i.rawVal>0).reduce((s,i)=>s+i.value,0);
+  const totalOut=importItems.filter(i=>i.rawVal<=0).reduce((s,i)=>s+i.value,0);
+  $('importStats').style.display='flex';
+  $('importStats').innerHTML=`<span class="is-tot">📄 ${importItems.length} lançamentos</span><span class="is-in">▲ ${fmt(totalIn)}</span><span class="is-out">▼ ${fmt(totalOut)}</span>`;
+  const allCats=[...CATS.income,...CATS.variable,...CATS.fixed].filter((v,i,a)=>a.indexOf(v)===i);
+  $('importPreview').style.display='block';
+  $('importPreview').innerHTML=importItems.map((it,idx)=>{
+    const color=it.rawVal>0?'var(--green)':'var(--red)';
+    const sign=it.rawVal>0?'+':'−';
+    const opts=allCats.map(c=>`<option${c===it.category?' selected':''}>${c}</option>`).join('');
+    return `<div class="import-row">
+      <input type="checkbox" class="import-chk" id="ic${idx}" checked>
+      <div class="import-info">
+        <div class="import-desc">${it.desc}</div>
+        <div class="import-date">${fmtD(it.date)}</div>
+      </div>
+      <div class="import-amt" style="color:${color}">${sign} ${fmt(it.value)}</div>
+      <select class="import-cat-sel" id="icat${idx}" onchange="importItems[${idx}].category=this.value">${opts}</select>
+    </div>`;
+  }).join('');
+  $('importActions').style.display='flex';
+}
+
+function openImport(){ importItems=[]; $('importFile').value=''; $('importStats').style.display='none'; $('importPreview').style.display='none'; $('importActions').style.display='none'; $('importDrop').classList.remove('drag'); $('mImport').classList.add('open'); }
+function closeImport(){ $('mImport').classList.remove('open'); }
+$('mImport').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeImport(); });
+
+async function confirmarImport(){
+  const data=ld();
+  let count=0;
+  importItems.forEach((it,idx)=>{
+    const chk=$('ic'+idx); if(!chk||!chk.checked) return;
+    const cat=$('icat'+idx); if(cat) it.category=cat.value;
+    data.push({id:uid(), type:it.type, desc:it.desc, value:it.value, category:it.category, date:it.date});
+    count++;
+  });
+  sd(data); closeImport(); render();
+  if(apage==='gastos') renderGastos();
+  await syncToCloud();
+  alert(`✓ ${count} lançamento(s) importado(s) com sucesso!`);
+}
+
+// ═══════════════════════════════════════════════════
+//  ALERTAS E NOTIFICAÇÕES
+// ═══════════════════════════════════════════════════
+function salvarConfigAlerta(){
+  localStorage.setItem('fc_alert_saldo', $('alertSaldo').value||'500');
+  localStorage.setItem('fc_alert_dias',  $('alertDias').value||'3');
+  verificarAlertas();
+}
+
+function carregarConfigAlerta(){
+  $('alertSaldo').value = localStorage.getItem('fc_alert_saldo')||'500';
+  $('alertDias').value  = localStorage.getItem('fc_alert_dias')||'3';
+}
+
+function toggleAlertas(){
+  const p=$('alertasPanel');
+  p.classList.toggle('show');
+  if(p.classList.contains('show')){ carregarConfigAlerta(); verificarAlertas(); }
+}
+
+function verificarAlertas(){
+  const {y,m}=cMonth, now=new Date(), today=now.getDate();
+  const limSaldo=parseFloat(localStorage.getItem('fc_alert_saldo')||'500');
+  const limDias=parseInt(localStorage.getItem('fc_alert_dias')||'3');
+  const alertas=[], fixas=ld().filter(e=>e.type==='fixed');
+  const acct=loadAcct();
+
+  // Saldo baixo
+  if(acct>0 && acct<=limSaldo){
+    alertas.push({tipo:'danger',icon:'💸',titulo:'Saldo baixo!',detalhe:`Conta com ${fmt(acct)} — abaixo do limite de ${fmt(limSaldo)}`});
+  }
+
+  // Fixas vencendo em breve
+  fixas.forEach(e=>{
+    if(!e.dayOfMonth) return;
+    const st=getStatus(e.id,y,m);
+    if(st==='paid'||st==='late-paid') return;
+    const diff=e.dayOfMonth-today;
+    if(diff>=0&&diff<=limDias){
+      alertas.push({tipo:'warn',icon:'⏰',titulo:`${e.desc} vence em ${diff===0?'HOJE':''+diff+' dia(s)'}`,detalhe:`${fmt(e.value)} · dia ${e.dayOfMonth}`});
+    }
+    if(st==='overdue'){
+      alertas.push({tipo:'danger',icon:'⚠️',titulo:`${e.desc} está em atraso`,detalhe:`${fmt(e.value)} — venceu dia ${e.dayOfMonth}`});
+    }
+  });
+
+  // Tudo ok
+  if(!alertas.length){
+    alertas.push({tipo:'ok',icon:'✅',titulo:'Tudo em ordem!',detalhe:'Nenhum alerta no momento.'});
+  }
+
+  // Badge no sino
+  const hasBad=alertas.some(a=>a.tipo!=='ok');
+  $('alertBtn').querySelector('.alert-badge')?.classList.toggle('show',hasBad);
+
+  $('alertasList').innerHTML=alertas.map(a=>`
+    <div class="alerta-item ${a.tipo}">
+      <div class="alerta-icon">${a.icon}</div>
+      <div class="alerta-txt"><strong>${a.titulo}</strong><span>${a.detalhe}</span></div>
+    </div>`).join('');
+
+  // Notificações push se tiver permissão
+  if(Notification.permission==='granted'){
+    const bad=alertas.filter(a=>a.tipo!=='ok');
+    const lastNotif=localStorage.getItem('fc_last_notif');
+    const hoje=now.toISOString().slice(0,10);
+    if(bad.length&&lastNotif!==hoje){
+      bad.forEach(a=>{ new Notification('FluxoCaixa · '+a.titulo,{body:a.detalhe,icon:''}); });
+      localStorage.setItem('fc_last_notif',hoje);
+    }
+  }
+  updateNotifBtn();
+}
+
+function updateNotifBtn(){
+  const btn=$('notifBtn');
+  if(!('Notification' in window)){btn.textContent='Navegador não suporta';btn.disabled=true;return;}
+  if(Notification.permission==='granted'){btn.textContent='✓ Notificações ativas';btn.style.background='var(--gdim)';}
+  else if(Notification.permission==='denied'){btn.textContent='Bloqueado pelo navegador';btn.disabled=true;}
+  else{btn.textContent='Ativar notificações';}
+  // Add badge span if missing
+  if(!$('alertBtn').querySelector('.alert-badge')){
+    const b=document.createElement('div');b.className='alert-badge';$('alertBtn').appendChild(b);
+  }
+}
+
+async function pedirNotificacao(){
+  if(!('Notification' in window)){alert('Seu navegador não suporta notificações.');return;}
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){ new Notification('FluxoCaixa ativado! 🎉',{body:'Você receberá alertas de vencimentos e saldo baixo.'}); }
+  updateNotifBtn();
+}
+
+// ═══════════════════════════════════════════════════
+//  REFORMA DO APARTAMENTO
+// ═══════════════════════════════════════════════════
+const RK_ETAPAS = 'fc_ref_etapas';
+const RK_FORNS  = 'fc_ref_forns';
+const RK_GASTOS = 'fc_ref_gastos';
+
+const lrE = () => { try{return JSON.parse(localStorage.getItem(RK_ETAPAS))||[]}catch{return[]} };
+const srE = d => localStorage.setItem(RK_ETAPAS, JSON.stringify(d));
+const lrF = () => { try{return JSON.parse(localStorage.getItem(RK_FORNS))||[]}catch{return[]} };
+const srF = d => localStorage.setItem(RK_FORNS, JSON.stringify(d));
+const lrG = () => { try{return JSON.parse(localStorage.getItem(RK_GASTOS))||[]}catch{return[]} };
+const srG = d => localStorage.setItem(RK_GASTOS, JSON.stringify(d));
+
+let refGastoEditId = null;
+
+// ─ RENDER REFORMA ─
+function renderReforma(){
+  const etapas=lrE(), forns=lrF(), gastos=lrG();
+  const totalOrc=etapas.reduce((s,e)=>s+e.orc,0);
+  const totalGasto=gastos.reduce((s,g)=>s+g.val,0);
+  const totalPend=forns.reduce((s,f)=>s+Math.max(0,f.total-f.pago),0);
+  const saldo=totalOrc-totalGasto;
+  const pct=totalOrc>0?Math.min(100,Math.round(totalGasto/totalOrc*100)):0;
+
+  setT('refKOrc',fmt(totalOrc));
+  const kgEl=$('refKGasto'); kgEl.textContent=fmt(totalGasto);
+  kgEl.style.color=totalGasto>totalOrc&&totalOrc>0?'var(--red)':'var(--purple)';
+  setT('refKGastoS',gastos.length+' lançamentos');
+  const ksEl=$('refKSaldo'); ksEl.textContent=fmt(Math.abs(saldo));
+  ksEl.style.color=saldo>=0?'var(--green)':'var(--red)';
+  $('refKSaldo').parentElement.className='kcard '+(saldo>=0?'g':'r');
+  setT('refKPend',fmt(totalPend));
+  setT('refKPendS',forns.filter(f=>f.total>f.pago).length+' fornecedor(es)');
+  setT('refSubtitle',`${etapas.length} etapa(s) · ${forns.length} fornecedor(es) · ${gastos.length} gasto(s)`);
+
+  // Barra geral
+  setT('refPct',pct+'%');
+  const fill=$('refBarFill');
+  fill.style.width=pct+'%';
+  fill.className='ref-orcamento-fill'+(pct>100?' over':'');
+  setT('refBarLeft',fmt(totalGasto)+' gasto');
+  setT('refBarRight','de '+fmt(totalOrc)+' orçados');
+
+  // Etapas
+  const el=$('refEtapas');
+  if(!etapas.length){
+    el.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhuma etapa.<br>Clique em "+ Etapa" para começar.<br><br>Sugestões: Estrutura · Elétrica · Hidráulica · Revestimento · Gesso/Pintura · Móveis · Acabamentos</div>';
+  } else {
+    el.innerHTML=etapas.map(e=>{
+      const gasto=gastos.filter(g=>g.etapaId===e.id).reduce((s,g)=>s+g.val,0);
+      const p=e.orc>0?Math.min(100,Math.round(gasto/e.orc*100)):0;
+      const over=gasto>e.orc&&e.orc>0;
+      return `<div class="ref-etapa-card" onclick="filtrarRefPorEtapa('${e.id}','${e.nome}')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="ref-etapa-name">${e.nome}</div>
+          <button onclick="event.stopPropagation();delRefEtapa('${e.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:2px">✕</button>
+        </div>
+        <div class="ref-etapa-orcado">Orçado: ${fmt(e.orc)}</div>
+        <div class="ref-etapa-gasto" style="color:${over?'var(--red)':'var(--purple)'}">${fmt(gasto)}</div>
+        <div class="ref-etapa-bar"><div class="ref-etapa-fill${over?' over':''}" style="width:${p}%"></div></div>
+        <div class="ref-etapa-pct">${p}% utilizado${over?' · ESTOUROU':''}${e.orc>0?' · sobra '+fmt(Math.max(0,e.orc-gasto)):''}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Fornecedores
+  const fe=$('refForns');
+  if(!forns.length){
+    fe.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhum fornecedor cadastrado.</div>';
+  } else {
+    fe.innerHTML=forns.map(f=>{
+      const pend=Math.max(0,f.total-f.pago);
+      return `<div class="ref-forn-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div><div class="ref-forn-name">${f.nome}</div><div class="ref-forn-tipo">${f.tipo}</div></div>
+          <button onclick="delRefForn('${f.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕</button>
+        </div>
+        ${f.total>0?`<div class="ref-forn-total">${fmt(f.total)} combinado</div>`:''}
+        <div class="ref-forn-pago">✓ ${fmt(f.pago)} pago</div>
+        ${pend>0?`<div class="ref-forn-pend">⏳ ${fmt(pend)} pendente</div>`:'<div style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--green)">✓ Quitado</div>'}
+        ${f.contato?`<div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:4px">${f.contato}</div>`:''}
+        <div class="ref-forn-actions">
+          <button class="dbtn dbtn-p" style="background:var(--pdim);color:var(--purple);border-color:rgba(167,139,250,.3)" onclick="pagarForn('${f.id}')">+ Pagamento</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Lista de gastos
+  renderRefTx(gastos, 'Todos os Gastos da Reforma');
+}
+
+function renderRefTx(gastos, titulo){
+  setT('refTxTitle', titulo);
+  const el=$('refTxList');
+  if(!gastos.length){el.innerHTML='<div class="empty">Nenhum gasto registrado.</div>';return;}
+  const sorted=[...gastos].sort((a,b)=>b.data.localeCompare(a.data));
+  const etapas=lrE(), forns=lrF();
+  el.innerHTML=sorted.map(g=>{
+    const et=etapas.find(e=>e.id===g.etapaId);
+    const fn=forns.find(f=>f.id===g.fornId);
+    return `<div class="ref-tx-item">
+      <div class="ref-tx-dot"></div>
+      <div class="ref-tx-info">
+        <div class="ref-tx-desc">${g.desc}</div>
+        <div class="ref-tx-meta">${fmtD(g.data)}${et?' · '+et.nome:''}${fn?' · '+fn.nome:''}${g.obs?' · '+g.obs:''}</div>
+      </div>
+      <div class="ref-tx-amt">− ${fmt(g.val)}</div>
+      <div class="txi-actions" style="margin-left:6px">
+        <button class="txi-btn edit" onclick="openRefGastoEdit('${g.id}')" title="Editar">✎</button>
+        <button class="txi-btn del"  onclick="delRefGasto('${g.id}')"      title="Excluir">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filtrarRefPorEtapa(id, nome){
+  const gastos=lrG().filter(g=>g.etapaId===id);
+  renderRefTx(gastos, '🏗️ '+nome);
+  $('refTxList').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ─ ETAPA ─
+function openRefEtapa(){ $('reNome').value=''; $('reOrc').value='0'; $('mRefEtapa').classList.add('open'); }
+function closeRefEtapa(){ $('mRefEtapa').classList.remove('open'); }
+$('mRefEtapa').addEventListener('click',e=>{if(e.target===e.currentTarget)closeRefEtapa();});
+function saveRefEtapa(){
+  const nome=$('reNome').value.trim(), orc=parseFloat($('reOrc').value)||0;
+  if(!nome){alert('Informe o nome da etapa.');return;}
+  const etapas=lrE(); etapas.push({id:uid(),nome,orc}); srE(etapas);
+  closeRefEtapa(); renderReforma();
+}
+function delRefEtapa(id){
+  if(!confirm('Remover esta etapa? Os gastos vinculados perdem o vínculo.')) return;
+  srE(lrE().filter(e=>e.id!==id));
+  srG(lrG().map(g=>g.etapaId===id?{...g,etapaId:''}:g));
+  renderReforma();
+}
+
+// ─ FORNECEDOR ─
+function openRefForn(){ $('rfNome').value=''; $('rfTotal').value='0'; $('rfPago').value='0'; $('rfContato').value=''; $('mRefForn').classList.add('open'); }
+function closeRefForn(){ $('mRefForn').classList.remove('open'); }
+$('mRefForn').addEventListener('click',e=>{if(e.target===e.currentTarget)closeRefForn();});
+function saveRefForn(){
+  const nome=$('rfNome').value.trim();
+  if(!nome){alert('Informe o nome.');return;}
+  const forns=lrF();
+  forns.push({id:uid(),nome,tipo:$('rfTipo').value,total:parseFloat($('rfTotal').value)||0,pago:parseFloat($('rfPago').value)||0,contato:$('rfContato').value.trim()});
+  srF(forns); closeRefForn(); renderReforma();
+}
+function delRefForn(id){
+  if(!confirm('Remover fornecedor?')) return;
+  srF(lrF().filter(f=>f.id!==id)); renderReforma();
+}
+function pagarForn(id){
+  const f=lrF().find(f=>f.id===id); if(!f) return;
+  const pend=Math.max(0,f.total-f.pago);
+  const etapas=lrE();
+  $('pfEtapa').innerHTML='<option value="">— Sem etapa —</option>'+etapas.map(e=>`<option value="${e.id}">${e.nome}</option>`).join('');
+  // Se houver só uma etapa cadastrada, pré-seleciona automaticamente
+  if(etapas.length===1) $('pfEtapa').value=etapas[0].id;
+  $('pfNome').textContent=f.nome;
+  $('pfDet').textContent=(pend>0?'Pendente: '+fmt(pend)+' · ':'Quitado · ')+'Total combinado: '+fmt(f.total);
+  $('pfVal').value=pend>0?pend.toFixed(2):'';
+  $('pfData').value=new Date().toISOString().split('T')[0];
+  $('pfObs').value='';
+  $('mPagarForn').dataset.id=id;
+  $('mPagarForn').classList.add('open');
+}
+function closeMPagarForn(){ $('mPagarForn').classList.remove('open'); }
+$('mPagarForn').addEventListener('click',e=>{if(e.target===e.currentTarget)closeMPagarForn();});
+function confirmPagarForn(){
+  const id=$('mPagarForn').dataset.id;
+  const val=parseFloat($('pfVal').value);
+  const dt=$('pfData').value;
+  const etapaId=$('pfEtapa').value;
+  const obs=$('pfObs').value.trim();
+  if(!val||isNaN(val)||!dt){alert('Preencha valor e data.');return;}
+  // Atualiza pago no fornecedor
+  const forns=lrF(), fi=forns.find(f=>f.id===id);
+  if(fi){ fi.pago=(fi.pago||0)+val; srF(forns); }
+  // Lança como gasto vinculado à etapa
+  const f=fi||{nome:'Fornecedor'};
+  const gastos=lrG();
+  gastos.push({id:uid(), desc:'Pagamento — '+f.nome, val, data:dt, etapaId, fornId:id, obs});
+  srG(gastos);
+  closeMPagarForn(); renderReforma();
+}
+
+// ─ GASTO ─
+function openRefGasto(){
+  refGastoEditId=null;
+  $('refGastoTitle').textContent='Novo Gasto de Reforma';
+  $('rgDesc').value=''; $('rgVal').value=''; $('rgObs').value='';
+  $('rgData').value=new Date().toISOString().split('T')[0];
+  populateRefSelects();
+  $('rgSaveBtn').textContent='Salvar Gasto';
+  $('mRefGasto').classList.add('open');
+  setTimeout(()=>$('rgDesc').focus(),60);
+}
+function openRefGastoEdit(id){
+  const g=lrG().find(g=>g.id===id); if(!g) return;
+  refGastoEditId=id;
+  $('refGastoTitle').textContent='Editar Gasto';
+  $('rgDesc').value=g.desc; $('rgVal').value=g.val; $('rgObs').value=g.obs||''; $('rgData').value=g.data;
+  populateRefSelects();
+  setTimeout(()=>{ $('rgEtapa').value=g.etapaId||''; $('rgForn').value=g.fornId||''; },30);
+  $('rgSaveBtn').textContent='Atualizar';
+  $('mRefGasto').classList.add('open');
+}
+function closeRefGasto(){ $('mRefGasto').classList.remove('open'); refGastoEditId=null; }
+$('mRefGasto').addEventListener('click',e=>{if(e.target===e.currentTarget)closeRefGasto();});
+
+function populateRefSelects(){
+  const etapas=lrE(), forns=lrF();
+  $('rgEtapa').innerHTML='<option value="">— Sem etapa —</option>'+etapas.map(e=>`<option value="${e.id}">${e.nome}</option>`).join('');
+  $('rgForn').innerHTML='<option value="">— Nenhum —</option>'+forns.map(f=>`<option value="${f.id}">${f.nome}</option>`).join('');
+}
+
+function saveRefGasto(){
+  const desc=$('rgDesc').value.trim(), val=parseFloat($('rgVal').value);
+  if(!desc||!val){alert('Preencha descrição e valor.');return;}
+  const gastos=lrG();
+  const payload={desc,val,data:$('rgData').value,etapaId:$('rgEtapa').value,fornId:$('rgForn').value,obs:$('rgObs').value.trim()};
+  if(refGastoEditId){
+    const idx=gastos.findIndex(g=>g.id===refGastoEditId);
+    if(idx>=0) gastos[idx]={...gastos[idx],...payload};
+  } else {
+    gastos.push({id:uid(),...payload});
+  }
+  srG(gastos); closeRefGasto(); renderReforma();
+}
+
+// Verificar alertas a cada 1h e ao carregar
+setInterval(verificarAlertas, 3600000);
+
+function delRefGasto(id){
+  if(!confirm('Remover este gasto?')) return;
+  srG(lrG().filter(g=>g.id!==id)); renderReforma();
+}
 </script>
 </body>
 </html>
