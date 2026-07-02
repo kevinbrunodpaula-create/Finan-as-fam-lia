@@ -1215,11 +1215,14 @@ function getVarStatus(id){
   return vs[id]||'pending';
 }
 function cycleVarStatus(id){
-  const vs=ldvs();
-  const cur=getVarStatus(id);
-  const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
-  vs[id]=cycle[cur]||'pending';
-  sdvs(vs);render();
+  try{
+    const vs=JSON.parse(localStorage.getItem('fc_varstatus'))||{};
+    const cur=vs[id]||'pending';
+    const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
+    vs[id]=cycle[cur]||'pending';
+    localStorage.setItem('fc_varstatus',JSON.stringify(vs));
+  }catch(e){console.warn(e);}
+  render();
 };
   fs[k]=cycle[cur]||'pending';
   sdfs(fs); render(); syncToCloud();
@@ -1418,6 +1421,7 @@ function renderFix(fix){
 }
 
 // ─ VARIABLE ─
+function _getVS(id){try{return(JSON.parse(localStorage.getItem('fc_varstatus'))||{})[id]||'pending';}catch{return'pending';}}
 function renderVar(va){
   const el=$('varList');
   if(!va.length){el.innerHTML='<div class="empty">Sem despesas variáveis.</div>';}
@@ -1427,13 +1431,12 @@ function renderVar(va){
       const tot=items.reduce((s,i)=>s+(Number(i.value)||0),0);
       return `<div class="egh"><div class="egtitle"><span class="egtag tgv">VARIÁVEL</span>${cat}</div><div class="egtot egto">${fmt(tot)}</div></div>`
         +items.map(e=>{
-          const st=getVarStatus(e.id);
+          const st=_getVS(e.id);
           const lbl={'pending':'⏳ Pendente','paid':'✓ Pago','late-paid':'✓ Pago c/ Atraso','overdue':'⚠ Em Atraso'};
           const cls={'pending':'sb-pending','paid':'sb-paid','late-paid':'sb-late-paid','overdue':'sb-overdue'};
-          const amtCls={'pending':'eao','paid':'eao','late-paid':'eao','overdue':'eao'};
           return `<div class="fix-item">
-            <div class="einfo"><div class="edesc">${e.desc}</div><div class="emeta">${fmtD(e.date)} · ${e.category}</div></div>
-            <div class="eamt eao" style="font-size:12px">− ${fmt(e.value)}</div>
+            <div class="einfo"><div class="edesc">${e.desc||'—'}</div><div class="emeta">${fmtD(e.date)} · ${e.category||'—'}</div></div>
+            <div class="eamt eao" style="font-size:12px">− ${fmt(Number(e.value)||0)}</div>
             <button class="status-btn ${cls[st]}" onclick="cycleVarStatus('${e.id}')">${lbl[st]}</button>
             <div class="txi-actions" style="margin-left:4px">
               <button class="txi-btn edit" onclick="openEditModal('${e.id}')" title="Editar">✎</button>
@@ -1443,8 +1446,8 @@ function renderVar(va){
         }).join('');
     }).join('');
   }
-  const tot=va.reduce((s,e)=>s+e.value,0);
-  const paidVar=va.filter(e=>{ const st=getVarStatus(e.id); return st==='paid'||st==='late-paid'; }).length;
+  const tot=va.reduce((s,e)=>s+(Number(e.value)||0),0);
+  const paidVar=va.filter(e=>{ const st=_getVS(e.id); return st==='paid'||st==='late-paid'; }).length;
   setT('varTotal',fmt(tot));
   setT('varCount',paidVar+'/'+va.length+' pagos');
 }
