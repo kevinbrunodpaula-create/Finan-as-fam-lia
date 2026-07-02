@@ -589,7 +589,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
             <button class="pact ar" onclick="openModal('fixed')">+ Adicionar</button>
           </div>
         </div>
-        <div id="fixedBody" class="collapsible collapsed">
+        <div id="fixedBody" class="collapsible">
         <div id="fixedList"></div>
         <div class="pfoot" style="flex-direction:column;align-items:stretch;gap:10px">
           <div style="display:flex;justify-content:space-between;align-items:center">
@@ -615,7 +615,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
             <button class="pact ao" onclick="openModal('variable')">+ Adicionar</button>
           </div>
         </div>
-        <div id="varBody" class="collapsible collapsed">
+        <div id="varBody" class="collapsible">
         <div id="varList"></div>
         <div class="pfoot"><div><div class="pflbl">Total Vari&aacute;vel</div><div class="pfsub" id="varCount"></div></div><div class="pfval pfo" id="varTotal">R$ 0</div></div>
         </div>
@@ -627,7 +627,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
             <button class="pact ag" onclick="openModal('forecast')">+ Adicionar</button>
           </div>
         </div>
-        <div id="foreBody" class="collapsible collapsed">
+        <div id="foreBody" class="collapsible">
         <div id="foreList"></div>
         <div class="pfoot"><div><div class="pflbl">Total Previsto</div><div class="pfsub" id="foreCount"></div></div><div class="pfval pfy" id="foreTotal">R$ 0</div></div>
         </div>
@@ -1336,7 +1336,7 @@ function toggleSideList(id, btnId){
 }
 function applySideListState(id, btnId){
   const saved=localStorage.getItem('fc_collapse_'+id);
-  const collapsed = saved===null ? true : saved==='1';
+  const collapsed = saved===null ? false : saved==='1';
   const el=$(id), btn=$(btnId);
   el.classList.toggle('collapsed', collapsed);
   btn.innerHTML = collapsed ? '&#x1F441; Ver tudo' : '&#x1F648; Ocultar';
