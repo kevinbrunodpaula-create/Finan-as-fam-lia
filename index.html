@@ -192,7 +192,9 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .txi-actions{display:flex;gap:5px;margin-left:6px}
 .txi-btn{width:24px;height:24px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all .1s}
 .txi-btn:hover{border-color:var(--sub);color:var(--text)}
-.collapsible.collapsed{display:none}
+.collapsible{overflow:hidden;transition:max-height .3s ease}
+.collapsible.collapsed{max-height:0!important}
+.collapsible.expanded{max-height:9999px}
 .toggle-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .toggle-btn:hover{border-color:var(--sub);color:var(--text)}
 .txi-btn.del:hover{border-color:var(--red);color:var(--red)}
@@ -589,7 +591,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
             <button class="pact ar" onclick="openModal('fixed')">+ Adicionar</button>
           </div>
         </div>
-        <div id="fixedBody" class="collapsible">
+        <div id="fixedBody" class="collapsible expanded">
         <div id="fixedList"></div>
         <div class="pfoot" style="flex-direction:column;align-items:stretch;gap:10px">
           <div style="display:flex;justify-content:space-between;align-items:center">
@@ -615,7 +617,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
             <button class="pact ao" onclick="openModal('variable')">+ Adicionar</button>
           </div>
         </div>
-        <div id="varBody" class="collapsible">
+        <div id="varBody" class="collapsible expanded">
         <div id="varList"></div>
         <div class="pfoot"><div><div class="pflbl">Total Vari&aacute;vel</div><div class="pfsub" id="varCount"></div></div><div class="pfval pfo" id="varTotal">R$ 0</div></div>
         </div>
@@ -627,7 +629,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
             <button class="pact ag" onclick="openModal('forecast')">+ Adicionar</button>
           </div>
         </div>
-        <div id="foreBody" class="collapsible">
+        <div id="foreBody" class="collapsible expanded">
         <div id="foreList"></div>
         <div class="pfoot"><div><div class="pflbl">Total Previsto</div><div class="pfsub" id="foreCount"></div></div><div class="pfval pfy" id="foreTotal">R$ 0</div></div>
         </div>
@@ -1331,6 +1333,7 @@ function toggleSideList(id, btnId){
   const el=$(id), btn=$(btnId);
   const collapsed=!el.classList.contains('collapsed');
   el.classList.toggle('collapsed', collapsed);
+  el.classList.toggle('expanded', !collapsed);
   btn.innerHTML = collapsed ? '&#x1F441; Ver tudo' : '&#x1F648; Ocultar';
   localStorage.setItem('fc_collapse_'+id, collapsed?'1':'0');
 }
@@ -1339,6 +1342,7 @@ function applySideListState(id, btnId){
   const collapsed = saved===null ? false : saved==='1';
   const el=$(id), btn=$(btnId);
   el.classList.toggle('collapsed', collapsed);
+  el.classList.toggle('expanded', !collapsed);
   btn.innerHTML = collapsed ? '&#x1F441; Ver tudo' : '&#x1F648; Ocultar';
 }
 
