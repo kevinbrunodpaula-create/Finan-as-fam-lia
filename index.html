@@ -931,10 +931,10 @@ async function syncFromCloud(){
       sbGet('fc_config','select=*'),
     ]);
 
-    // Map Supabase snake_case → app camelCase
+    // Map Supabase snake_case → app camelCase (force numeric value)
     const mapped = entries.map(e=>({
-      id: e.id, type: e.type, desc: e.descricao, value: e.value,
-      category: e.category, date: e.date, dayOfMonth: e.day_of_month
+      id: e.id, type: e.type, desc: e.descricao, value: Number(e.value)||0,
+      category: e.category, date: e.date||null, dayOfMonth: e.day_of_month||null
     }));
     sd(mapped);
 
@@ -992,6 +992,8 @@ async function syncToCloud(){
     const fs = ldfs();
     const fsRows = Object.entries(fs).map(([key,status])=>({key,status}));
     if(fsRows.length) await sbUpsert('fc_fix_status', fsRows);
+
+    // Var statuses (local only — no Supabase table needed, stays per-device)
 
     // Debts
     const debts = ldd().map(d=>({
@@ -1304,8 +1306,8 @@ function render(){
   const all=mEntries();
   const inc=all.filter(e=>e.type==='income'), fix=all.filter(e=>e.type==='fixed'),
         va=all.filter(e=>e.type==='variable'), fo=all.filter(e=>e.type==='forecast');
-  const tI=inc.reduce((s,e)=>s+e.value,0), tF=fix.reduce((s,e)=>s+e.value,0),
-        tV=va.reduce((s,e)=>s+e.value,0),  tFo=fo.reduce((s,e)=>s+e.value,0);
+  const tI=inc.reduce((s,e)=>s+(Number(e.value)||0),0), tF=fix.reduce((s,e)=>s+(Number(e.value)||0),0),
+        tV=va.reduce((s,e)=>s+(Number(e.value)||0),0),  tFo=fo.reduce((s,e)=>s+(Number(e.value)||0),0);
   const tFeff=fix.filter(e=>{const st=getStatus(e.id,y,m);return st==='paid'||st==='late-paid'||st==='overdue';}).reduce((s,e)=>s+e.value,0);
   const saldo=tI+tFo-tFeff-tV, tIn=tI+tFo;
   setT('kRec',fmt(tI)); setT('kRecS',inc.length+' lanc.');
@@ -1384,7 +1386,7 @@ function renderFix(fix){
   else{
     const g=grp(fix,'category');
     el.innerHTML=Object.entries(g).map(([cat,items])=>{
-      const tot=items.reduce((s,i)=>s+i.value,0);
+      const tot=items.reduce((s,i)=>s+(Number(i.value)||0),0);
       return `<div class="egh"><div class="egtitle"><span class="egtag tgf">FIXA</span>${cat}</div><div class="egtot egtr">${fmt(tot)}</div></div>`
         +items.map(e=>{
           const st=getStatus(e.id,y,m);
@@ -1421,7 +1423,7 @@ function renderVar(va){
   else{
     const g=grp(va,'category');
     el.innerHTML=Object.entries(g).map(([cat,items])=>{
-      const tot=items.reduce((s,i)=>s+i.value,0);
+      const tot=items.reduce((s,i)=>s+(Number(i.value)||0),0);
       return `<div class="egh"><div class="egtitle"><span class="egtag tgv">VARIÁVEL</span>${cat}</div><div class="egtot egto">${fmt(tot)}</div></div>`
         +items.map(e=>{
           const st=getVarStatus(e.id);
@@ -1469,10 +1471,11 @@ function renderChart(all){
   const gw=d=>Math.min(Math.floor((new Date(d+'T12:00:00').getDate()-1)/7),4);
   const inc=[0,0,0,0,0],fix=[0,0,0,0,0],va=[0,0,0,0,0],fo=[0,0,0,0,0];
   all.forEach(e=>{
-    if(e.type==='income') inc[gw(e.date)]+=e.value;
-    else if(e.type==='fixed') fix[Math.min(Math.floor(((e.dayOfMonth||1)-1)/7),4)]+=e.value;
-    else if(e.type==='variable') va[gw(e.date)]+=e.value;
-    else if(e.type==='forecast') fo[gw(e.date)]+=e.value;
+    const v=Number(e.value)||0;
+    if(e.type==='income') inc[gw(e.date)]+=v;
+    else if(e.type==='fixed') fix[Math.min(Math.floor(((e.dayOfMonth||1)-1)/7),4)]+=v;
+    else if(e.type==='variable') va[gw(e.date)]+=v;
+    else if(e.type==='forecast') fo[gw(e.date)]+=v;
   });
   const mx=Math.max(...inc,...fix,...va,...fo,1);
   const p=v=>Math.max(2,Math.round(v/mx*100));
@@ -1614,7 +1617,7 @@ async function saveEntry(){
     }
   } else {
     // New entry
-    const e={id:uid(),type:ctype,desc,value:val,category:cat};
+    const e={id:uid(),type:ctype,desc,value:Number(val)||0,category:cat};
     if(ctype==='fixed'){ e.dayOfMonth=parseInt(d.split('-')[2],10); }
     else { e.date=d; }
     data.push(e);
