@@ -70,7 +70,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .ptabs{display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:20px}
 .ptab{flex:1;padding:9px 4px;border-radius:8px;border:none;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
 .ptab.active{background:var(--surface2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.ptab.pd.active{color:var(--red)}.ptab.pi.active{color:var(--teal)}.ptab.pg.active{color:var(--orange)}.ptab.pr.active{color:var(--purple)}
+.ptab.pd.active{color:var(--red)}.ptab.pi.active{color:var(--teal)}.ptab.pg.active{color:var(--orange)}
 .psec{display:none}.psec.active{display:block}
 
 /* MONTH */
@@ -502,7 +502,6 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   <button class="ptab pg"     onclick="setPage('gastos',this)">📆 Gastos</button>
   <button class="ptab pd"     onclick="setPage('dividas',this)">🔴 Dívidas</button>
   <button class="ptab pi"     onclick="setPage('invest',this)">📈 Invest.</button>
-  <button class="ptab pr"     onclick="setPage('reforma',this)">🏗️ Reforma</button>
 </div>
 
 <!-- PAGE FLUXO -->
@@ -707,49 +706,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   </div>
 </div>
 <!-- PAGE REFORMA -->
-<div class="psec" id="page-reforma">
-  <div class="pghead">
-    <div><div class="pghead-title">🏗️ Reforma do Apartamento</div><div class="pghead-sub" id="refSubtitle">Carregando…</div></div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="pact" style="background:var(--pdim);color:var(--purple);border:1px solid rgba(167,139,250,.3)" onclick="openRefGasto()">+ Gasto</button>
-      <button class="pact" style="background:rgba(255,255,255,.04);color:var(--sub);border:1px solid var(--border)" onclick="openRefForn()">+ Fornecedor</button>
-      <button class="pact" style="background:rgba(255,255,255,.04);color:var(--sub);border:1px solid var(--border)" onclick="openRefEtapa()">+ Etapa</button>
-    </div>
-  </div>
 
-  <!-- KPIs -->
-  <div class="kgrid" style="grid-template-columns:repeat(2,1fr);margin-bottom:20px" id="refKpis">
-    <div class="kcard p"><div class="klbl">Orçamento Total</div><div class="kval" id="refKOrc">R$ 0</div><div class="ksub">definido por etapa</div></div>
-    <div class="kcard p"><div class="klbl">Total Gasto</div><div class="kval" id="refKGasto">R$ 0</div><div class="ksub" id="refKGastoS">0 lançamentos</div></div>
-    <div class="kcard g"><div class="klbl">Saldo Disponível</div><div class="kval" id="refKSaldo">R$ 0</div><div class="ksub">orçamento − gasto</div></div>
-    <div class="kcard r"><div class="klbl">Fornecedores Pendentes</div><div class="kval" id="refKPend">R$ 0</div><div class="ksub" id="refKPendS">a pagar</div></div>
-  </div>
-
-  <!-- Barra geral -->
-  <div class="panel" style="margin-bottom:18px">
-    <div class="ph"><div class="ptitle">Progresso Geral da Reforma</div><div id="refPct" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--purple)">0%</div></div>
-    <div style="padding:14px 16px">
-      <div class="ref-orcamento-bar"><div class="ref-orcamento-fill" id="refBarFill" style="width:0%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">
-        <span id="refBarLeft">R$ 0 gasto</span><span id="refBarRight">de R$ 0 orçados</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Etapas -->
-  <div class="sec-ttl">ETAPAS</div>
-  <div class="ref-etapas" id="refEtapas"></div>
-
-  <!-- Fornecedores -->
-  <div class="sec-ttl">FORNECEDORES</div>
-  <div class="ref-forn-grid" id="refForns"></div>
-
-  <!-- Lançamentos -->
-  <div class="panel">
-    <div class="ph"><div class="ptitle" id="refTxTitle">Todos os Gastos</div></div>
-    <div class="ref-tx-list" id="refTxList"></div>
-  </div>
-</div>
 </div><!-- /app -->
 
 <!-- MODAL: LANCAMENTO (novo + edição) -->
@@ -843,82 +800,6 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
   </div>
 </div>
 
-<!-- MODAL: PAGAMENTO FORNECEDOR -->
-<div class="moverlay" id="mPagarForn">
-  <div class="modal">
-    <button class="xbtn" onclick="closeMPagarForn()">&#x2715;</button>
-    <h3>Registrar Pagamento</h3>
-    <div class="msub">O valor será lançado como gasto da etapa selecionada</div>
-    <div class="pinfo pinfor" style="margin-bottom:16px">
-      <div class="piname pinamer" id="pfNome"></div>
-      <div class="pidet" id="pfDet"></div>
-    </div>
-    <div class="frow2">
-      <div><label class="flabel">Valor pago (R$)</label><input type="number" class="finput" id="pfVal" step="0.01" min="0"></div>
-      <div><label class="flabel">Data</label><input type="date" class="finput" id="pfData"></div>
-    </div>
-    <div class="fmb"><label class="flabel">Vincular à Etapa</label><select class="fselect" id="pfEtapa"></select></div>
-    <div class="fmb"><label class="flabel">Observação (opcional)</label><input type="text" class="finput" id="pfObs" placeholder="Ex: parcela 1/2, recibo…"></div>
-    <div class="brow">
-      <button class="bcancel" onclick="closeMPagarForn()">Cancelar</button>
-      <button class="bsave" style="background:var(--purple);color:#fff" onclick="confirmPagarForn()">Confirmar Pagamento</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: GASTO REFORMA -->
-<div class="moverlay" id="mRefGasto">
-  <div class="modal">
-    <button class="xbtn" onclick="closeRefGasto()">&#x2715;</button>
-    <h3 id="refGastoTitle">Novo Gasto de Reforma</h3>
-    <div class="msub">Lançado na etapa selecionada</div>
-    <div class="fmb"><label class="flabel">Descrição</label><input type="text" class="finput" id="rgDesc" placeholder="Ex: Cerâmica banheiro, Porta madeira…"></div>
-    <div class="frow2">
-      <div><label class="flabel">Valor (R$)</label><input type="number" class="finput" id="rgVal" placeholder="0,00" step="0.01" min="0"></div>
-      <div><label class="flabel">Data</label><input type="date" class="finput" id="rgData"></div>
-    </div>
-    <div class="frow2">
-      <div><label class="flabel">Etapa</label><select class="fselect" id="rgEtapa"></select></div>
-      <div><label class="flabel">Fornecedor (opcional)</label><select class="fselect" id="rgForn"><option value="">— Nenhum —</option></select></div>
-    </div>
-    <div class="fmb"><label class="flabel">Observação (opcional)</label><input type="text" class="finput" id="rgObs" placeholder="Ex: parcela 1/3, nota fiscal…"></div>
-    <div class="brow"><button class="bcancel" onclick="closeRefGasto()">Cancelar</button><button class="bsave" style="background:var(--purple);color:#fff" id="rgSaveBtn" onclick="saveRefGasto()">Salvar Gasto</button></div>
-  </div>
-</div>
-
-<!-- MODAL: FORNECEDOR REFORMA -->
-<div class="moverlay" id="mRefForn">
-  <div class="modal">
-    <button class="xbtn" onclick="closeRefForn()">&#x2715;</button>
-    <h3>Novo Fornecedor</h3>
-    <div class="msub">Pedreiro, loja, marceneiro, elétrica…</div>
-    <div class="fmb"><label class="flabel">Nome</label><input type="text" class="finput" id="rfNome" placeholder="Ex: Marcenaria Silva, Loja Leroy…"></div>
-    <div class="fmb"><label class="flabel">Tipo</label>
-      <select class="fselect" id="rfTipo">
-        <option>Mão de obra</option><option>Material</option><option>Móveis</option><option>Eletrodoméstico</option><option>Elétrica / Hidráulica</option><option>Pintura</option><option>Revestimento</option><option>Outros</option>
-      </select>
-    </div>
-    <div class="frow2">
-      <div><label class="flabel">Valor Combinado (R$)</label><input type="number" class="finput" id="rfTotal" placeholder="0,00" step="0.01" min="0" value="0"></div>
-      <div><label class="flabel">Já pago (R$)</label><input type="number" class="finput" id="rfPago" placeholder="0,00" step="0.01" min="0" value="0"></div>
-    </div>
-    <div class="fmb"><label class="flabel">Contato / Observação</label><input type="text" class="finput" id="rfContato" placeholder="Telefone, nome completo…"></div>
-    <div class="brow"><button class="bcancel" onclick="closeRefForn()">Cancelar</button><button class="bsave" style="background:var(--purple);color:#fff" onclick="saveRefForn()">Salvar Fornecedor</button></div>
-  </div>
-</div>
-
-<!-- MODAL: ETAPA REFORMA -->
-<div class="moverlay" id="mRefEtapa">
-  <div class="modal">
-    <button class="xbtn" onclick="closeRefEtapa()">&#x2715;</button>
-    <h3>Nova Etapa</h3>
-    <div class="msub">Estrutura, elétrica, hidráulica, revestimento…</div>
-    <div class="fmb"><label class="flabel">Nome da Etapa</label><input type="text" class="finput" id="reNome" placeholder="Ex: Elétrica, Revestimento, Móveis…"></div>
-    <div class="fmb"><label class="flabel">Orçamento previsto (R$)</label><input type="number" class="finput" id="reOrc" placeholder="0,00" step="0.01" min="0" value="0"></div>
-    <div class="brow"><button class="bcancel" onclick="closeRefEtapa()">Cancelar</button><button class="bsave" style="background:var(--purple);color:#fff" onclick="saveRefEtapa()">Criar Etapa</button></div>
-  </div>
-</div>
-
 <!-- MODAL: IMPORTAR EXTRATO -->
 <div class="moverlay" id="mImport">
   <div class="modal" style="max-width:540px">
@@ -975,11 +856,11 @@ async function sbDelete(table, filter){
 //  LIMPAR TUDO (reset completo)
 // ═══════════════════════════════════════════════════
 async function limparTudo(){
-  if(!confirm('⚠️ ATENÇÃO\n\nIsso vai APAGAR PERMANENTEMENTE:\n• Todos os lançamentos (recebimentos, fixas, variáveis, previsões)\n• Status de pagamento das fixas\n• Dívidas e investimentos\n• Saldo da conta e reserva de emergência\n• Dados da Reforma (etapas, fornecedores, gastos)\n\nIsso afeta TODOS os dispositivos conectados.\n\nDeseja continuar?')) return;
+  if(!confirm('⚠️ ATENÇÃO\n\nIsso vai APAGAR PERMANENTEMENTE:\n• Todos os lançamentos (recebimentos, fixas, variáveis, previsões)\n• Status de pagamento das fixas\n• Dívidas e investimentos\n• Saldo da conta e reserva de emergência\nIsso afeta TODOS os dispositivos conectados.\n\nDeseja continuar?')) return;
   if(!confirm('Última confirmação: tem certeza que quer começar do ZERO? Essa ação não pode ser desfeita.')) return;
 
   // Limpa armazenamento local
-  [KEY,DK,IK,FSK,ACCT_KEY,RESERVE_KEY,RK_ETAPAS,RK_FORNS,RK_GASTOS,
+  [KEY,DK,IK,FSK,VSK,ACCT_KEY,RESERVE_KEY,
    'fc_alert_saldo','fc_alert_dias','fc_last_notif'].forEach(k=>localStorage.removeItem(k));
 
   // Limpa nuvem (Supabase)
@@ -1020,7 +901,7 @@ window.addEventListener('offline', () => { isOnline=false; $('offlineBanner').cl
 // ═══════════════════════════════════════════════════
 //  LOCAL STORAGE (cache / offline)
 // ═══════════════════════════════════════════════════
-const KEY='fc_v2', DK='fc_debts', IK='fc_invest', FSK='fc_fixstatus', ACCT_KEY='fc_acct', RESERVE_KEY='fc_reserva';
+const KEY='fc_v2', DK='fc_debts', IK='fc_invest', FSK='fc_fixstatus', VSK='fc_varstatus', ACCT_KEY='fc_acct', RESERVE_KEY='fc_reserva';
 const ld   = () => { try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]} };
 const sd   = d  => localStorage.setItem(KEY, JSON.stringify(d));
 const ldd  = () => { try{return JSON.parse(localStorage.getItem(DK))||[]}catch{return[]} };
@@ -1029,6 +910,8 @@ const ldi  = () => { try{return JSON.parse(localStorage.getItem(IK))||[]}catch{r
 const sdi  = d  => localStorage.setItem(IK, JSON.stringify(d));
 const ldfs = () => { try{return JSON.parse(localStorage.getItem(FSK))||{}}catch{return{}} };
 const sdfs = d  => localStorage.setItem(FSK, JSON.stringify(d));
+const ldvs = () => { try{return JSON.parse(localStorage.getItem(VSK))||{}}catch{return{}} };
+const sdvs = d  => localStorage.setItem(VSK, JSON.stringify(d));
 function loadAcct(){ return parseFloat(localStorage.getItem(ACCT_KEY))||0; }
 function loadReserve(){ return parseFloat(localStorage.getItem(RESERVE_KEY))||0; }
 
@@ -1290,7 +1173,7 @@ const MNP = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agos
 const CATS = {
   income:   ['Pensão Aline','Trabalho Aline','Comissões Kevin','Outras entradas','Outros'],
   fixed:    ['Financiamento','Carro','Plano de Saúde','Consórcio','Luz','Internet','Celular Aline','Celular Kevin','Streamings','Água','Alarme','Outros'],
-  variable: ['Uber / Transporte','Cartão Crédito Itaú','Farmácia / Médicos','Mercado','Panificadora','Delivery','Lazer','Compras Internet','Empréstimos','Presentes','Viagens','Outros'],
+  variable: ['Uber / Transporte','Cartão Crédito Itaú','Farmácia / Médicos','Mercado','Panificadora','Delivery','Lazer','Compras Internet','Empréstimos','Presentes','Viagens','Apartamento','Outros'],
   forecast: ['Pensão Aline','Trabalho Aline','Comissões Kevin','Outras entradas','Outros']
 };
 const fmt  = v => 'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -1321,7 +1204,19 @@ function getStatus(id,y,m){
 function cycleStatus(id){
   const fs=ldfs(), k=fsKey(id,cMonth.y,cMonth.m);
   const cur=getStatus(id,cMonth.y,cMonth.m);
+  const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'}
+
+function getVarStatus(id){
+  const vs=ldvs();
+  return vs[id]||'pending';
+}
+function cycleVarStatus(id){
+  const vs=ldvs();
+  const cur=getVarStatus(id);
   const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
+  vs[id]=cycle[cur]||'pending';
+  sdvs(vs);render();
+};
   fs[k]=cycle[cur]||'pending';
   sdfs(fs); render(); syncToCloud();
 }
@@ -1377,7 +1272,6 @@ function setPage(p,btn){
   if(p==='gastos'){ gdMonth={y:cMonth.y,m:cMonth.m}; renderGastos(); }
   if(p==='dividas') renderDebts();
   if(p==='invest')  renderInvest();
-  if(p==='reforma') renderReforma();
 }
 
 function changeMonth(dir){
@@ -1525,18 +1419,27 @@ function renderVar(va){
     el.innerHTML=Object.entries(g).map(([cat,items])=>{
       const tot=items.reduce((s,i)=>s+i.value,0);
       return `<div class="egh"><div class="egtitle"><span class="egtag tgv">VARIÁVEL</span>${cat}</div><div class="egtot egto">${fmt(tot)}</div></div>`
-        +items.map(e=>`<div class="ei">
-          <div class="einfo"><div class="edesc">${e.desc}</div><div class="emeta">${fmtD(e.date)}</div></div>
-          <div class="eamt eao">− ${fmt(e.value)}</div>
-          <div class="txi-actions">
-            <button class="txi-btn edit" onclick="openEditModal('${e.id}')" title="Editar">✎</button>
-            <button class="txi-btn del"  onclick="delEntry('${e.id}')"       title="Excluir">✕</button>
-          </div>
-        </div>`).join('');
+        +items.map(e=>{
+          const st=getVarStatus(e.id);
+          const lbl={'pending':'⏳ Pendente','paid':'✓ Pago','late-paid':'✓ Pago c/ Atraso','overdue':'⚠ Em Atraso'};
+          const cls={'pending':'sb-pending','paid':'sb-paid','late-paid':'sb-late-paid','overdue':'sb-overdue'};
+          const amtCls={'pending':'eao','paid':'eao','late-paid':'eao','overdue':'eao'};
+          return `<div class="fix-item">
+            <div class="einfo"><div class="edesc">${e.desc}</div><div class="emeta">${fmtD(e.date)} · ${e.category}</div></div>
+            <div class="eamt eao" style="font-size:12px">− ${fmt(e.value)}</div>
+            <button class="status-btn ${cls[st]}" onclick="cycleVarStatus('${e.id}')">${lbl[st]}</button>
+            <div class="txi-actions" style="margin-left:4px">
+              <button class="txi-btn edit" onclick="openEditModal('${e.id}')" title="Editar">✎</button>
+              <button class="txi-btn del"  onclick="delEntry('${e.id}')"       title="Excluir">✕</button>
+            </div>
+          </div>`;
+        }).join('');
     }).join('');
   }
   const tot=va.reduce((s,e)=>s+e.value,0);
-  setT('varTotal',fmt(tot)); setT('varCount',va.length+' lançamento(s) este mês');
+  const paidVar=va.filter(e=>{ const st=getVarStatus(e.id); return st==='paid'||st==='late-paid'; }).length;
+  setT('varTotal',fmt(tot));
+  setT('varCount',paidVar+'/'+va.length+' pagos');
 }
 
 // ─ FORECAST ─
@@ -2208,244 +2111,7 @@ async function pedirNotificacao(){
 // ═══════════════════════════════════════════════════
 //  REFORMA DO APARTAMENTO
 // ═══════════════════════════════════════════════════
-const RK_ETAPAS = 'fc_ref_etapas';
-const RK_FORNS  = 'fc_ref_forns';
-const RK_GASTOS = 'fc_ref_gastos';
 
-const lrE = () => { try{return JSON.parse(localStorage.getItem(RK_ETAPAS))||[]}catch{return[]} };
-const srE = d => localStorage.setItem(RK_ETAPAS, JSON.stringify(d));
-const lrF = () => { try{return JSON.parse(localStorage.getItem(RK_FORNS))||[]}catch{return[]} };
-const srF = d => localStorage.setItem(RK_FORNS, JSON.stringify(d));
-const lrG = () => { try{return JSON.parse(localStorage.getItem(RK_GASTOS))||[]}catch{return[]} };
-const srG = d => localStorage.setItem(RK_GASTOS, JSON.stringify(d));
-
-let refGastoEditId = null;
-
-// ─ RENDER REFORMA ─
-function renderReforma(){
-  const etapas=lrE(), forns=lrF(), gastos=lrG();
-  const totalOrc=etapas.reduce((s,e)=>s+e.orc,0);
-  const totalGasto=gastos.reduce((s,g)=>s+g.val,0);
-  const totalPend=forns.reduce((s,f)=>s+Math.max(0,f.total-f.pago),0);
-  const saldo=totalOrc-totalGasto;
-  const pct=totalOrc>0?Math.min(100,Math.round(totalGasto/totalOrc*100)):0;
-
-  setT('refKOrc',fmt(totalOrc));
-  const kgEl=$('refKGasto'); kgEl.textContent=fmt(totalGasto);
-  kgEl.style.color=totalGasto>totalOrc&&totalOrc>0?'var(--red)':'var(--purple)';
-  setT('refKGastoS',gastos.length+' lançamentos');
-  const ksEl=$('refKSaldo'); ksEl.textContent=fmt(Math.abs(saldo));
-  ksEl.style.color=saldo>=0?'var(--green)':'var(--red)';
-  $('refKSaldo').parentElement.className='kcard '+(saldo>=0?'g':'r');
-  setT('refKPend',fmt(totalPend));
-  setT('refKPendS',forns.filter(f=>f.total>f.pago).length+' fornecedor(es)');
-  setT('refSubtitle',`${etapas.length} etapa(s) · ${forns.length} fornecedor(es) · ${gastos.length} gasto(s)`);
-
-  // Barra geral
-  setT('refPct',pct+'%');
-  const fill=$('refBarFill');
-  fill.style.width=pct+'%';
-  fill.className='ref-orcamento-fill'+(pct>100?' over':'');
-  setT('refBarLeft',fmt(totalGasto)+' gasto');
-  setT('refBarRight','de '+fmt(totalOrc)+' orçados');
-
-  // Etapas
-  const el=$('refEtapas');
-  if(!etapas.length){
-    el.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhuma etapa.<br>Clique em "+ Etapa" para começar.<br><br>Sugestões: Estrutura · Elétrica · Hidráulica · Revestimento · Gesso/Pintura · Móveis · Acabamentos</div>';
-  } else {
-    el.innerHTML=etapas.map(e=>{
-      const gasto=gastos.filter(g=>g.etapaId===e.id).reduce((s,g)=>s+g.val,0);
-      const p=e.orc>0?Math.min(100,Math.round(gasto/e.orc*100)):0;
-      const over=gasto>e.orc&&e.orc>0;
-      return `<div class="ref-etapa-card" onclick="filtrarRefPorEtapa('${e.id}','${e.nome}')">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="ref-etapa-name">${e.nome}</div>
-          <button onclick="event.stopPropagation();delRefEtapa('${e.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:2px">✕</button>
-        </div>
-        <div class="ref-etapa-orcado">Orçado: ${fmt(e.orc)}</div>
-        <div class="ref-etapa-gasto" style="color:${over?'var(--red)':'var(--purple)'}">${fmt(gasto)}</div>
-        <div class="ref-etapa-bar"><div class="ref-etapa-fill${over?' over':''}" style="width:${p}%"></div></div>
-        <div class="ref-etapa-pct">${p}% utilizado${over?' · ESTOUROU':''}${e.orc>0?' · sobra '+fmt(Math.max(0,e.orc-gasto)):''}</div>
-      </div>`;
-    }).join('');
-  }
-
-  // Fornecedores
-  const fe=$('refForns');
-  if(!forns.length){
-    fe.innerHTML='<div class="empty" style="grid-column:1/-1">Nenhum fornecedor cadastrado.</div>';
-  } else {
-    fe.innerHTML=forns.map(f=>{
-      const pend=Math.max(0,f.total-f.pago);
-      return `<div class="ref-forn-card">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div><div class="ref-forn-name">${f.nome}</div><div class="ref-forn-tipo">${f.tipo}</div></div>
-          <button onclick="delRefForn('${f.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px">✕</button>
-        </div>
-        ${f.total>0?`<div class="ref-forn-total">${fmt(f.total)} combinado</div>`:''}
-        <div class="ref-forn-pago">✓ ${fmt(f.pago)} pago</div>
-        ${pend>0?`<div class="ref-forn-pend">⏳ ${fmt(pend)} pendente</div>`:'<div style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--green)">✓ Quitado</div>'}
-        ${f.contato?`<div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:4px">${f.contato}</div>`:''}
-        <div class="ref-forn-actions">
-          <button class="dbtn dbtn-p" style="background:var(--pdim);color:var(--purple);border-color:rgba(167,139,250,.3)" onclick="pagarForn('${f.id}')">+ Pagamento</button>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  // Lista de gastos
-  renderRefTx(gastos, 'Todos os Gastos da Reforma');
-}
-
-function renderRefTx(gastos, titulo){
-  setT('refTxTitle', titulo);
-  const el=$('refTxList');
-  if(!gastos.length){el.innerHTML='<div class="empty">Nenhum gasto registrado.</div>';return;}
-  const sorted=[...gastos].sort((a,b)=>b.data.localeCompare(a.data));
-  const etapas=lrE(), forns=lrF();
-  el.innerHTML=sorted.map(g=>{
-    const et=etapas.find(e=>e.id===g.etapaId);
-    const fn=forns.find(f=>f.id===g.fornId);
-    return `<div class="ref-tx-item">
-      <div class="ref-tx-dot"></div>
-      <div class="ref-tx-info">
-        <div class="ref-tx-desc">${g.desc}</div>
-        <div class="ref-tx-meta">${fmtD(g.data)}${et?' · '+et.nome:''}${fn?' · '+fn.nome:''}${g.obs?' · '+g.obs:''}</div>
-      </div>
-      <div class="ref-tx-amt">− ${fmt(g.val)}</div>
-      <div class="txi-actions" style="margin-left:6px">
-        <button class="txi-btn edit" onclick="openRefGastoEdit('${g.id}')" title="Editar">✎</button>
-        <button class="txi-btn del"  onclick="delRefGasto('${g.id}')"      title="Excluir">✕</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function filtrarRefPorEtapa(id, nome){
-  const gastos=lrG().filter(g=>g.etapaId===id);
-  renderRefTx(gastos, '🏗️ '+nome);
-  $('refTxList').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-// ─ ETAPA ─
-function openRefEtapa(){ $('reNome').value=''; $('reOrc').value='0'; $('mRefEtapa').classList.add('open'); }
-function closeRefEtapa(){ $('mRefEtapa').classList.remove('open'); }
-$('mRefEtapa').addEventListener('click',e=>{if(e.target===e.currentTarget)closeRefEtapa();});
-function saveRefEtapa(){
-  const nome=$('reNome').value.trim(), orc=parseFloat($('reOrc').value)||0;
-  if(!nome){alert('Informe o nome da etapa.');return;}
-  const etapas=lrE(); etapas.push({id:uid(),nome,orc}); srE(etapas);
-  closeRefEtapa(); renderReforma();
-}
-function delRefEtapa(id){
-  if(!confirm('Remover esta etapa? Os gastos vinculados perdem o vínculo.')) return;
-  srE(lrE().filter(e=>e.id!==id));
-  srG(lrG().map(g=>g.etapaId===id?{...g,etapaId:''}:g));
-  renderReforma();
-}
-
-// ─ FORNECEDOR ─
-function openRefForn(){ $('rfNome').value=''; $('rfTotal').value='0'; $('rfPago').value='0'; $('rfContato').value=''; $('mRefForn').classList.add('open'); }
-function closeRefForn(){ $('mRefForn').classList.remove('open'); }
-$('mRefForn').addEventListener('click',e=>{if(e.target===e.currentTarget)closeRefForn();});
-function saveRefForn(){
-  const nome=$('rfNome').value.trim();
-  if(!nome){alert('Informe o nome.');return;}
-  const forns=lrF();
-  forns.push({id:uid(),nome,tipo:$('rfTipo').value,total:parseFloat($('rfTotal').value)||0,pago:parseFloat($('rfPago').value)||0,contato:$('rfContato').value.trim()});
-  srF(forns); closeRefForn(); renderReforma();
-}
-function delRefForn(id){
-  if(!confirm('Remover fornecedor?')) return;
-  srF(lrF().filter(f=>f.id!==id)); renderReforma();
-}
-function pagarForn(id){
-  const f=lrF().find(f=>f.id===id); if(!f) return;
-  const pend=Math.max(0,f.total-f.pago);
-  const etapas=lrE();
-  $('pfEtapa').innerHTML='<option value="">— Sem etapa —</option>'+etapas.map(e=>`<option value="${e.id}">${e.nome}</option>`).join('');
-  // Se houver só uma etapa cadastrada, pré-seleciona automaticamente
-  if(etapas.length===1) $('pfEtapa').value=etapas[0].id;
-  $('pfNome').textContent=f.nome;
-  $('pfDet').textContent=(pend>0?'Pendente: '+fmt(pend)+' · ':'Quitado · ')+'Total combinado: '+fmt(f.total);
-  $('pfVal').value=pend>0?pend.toFixed(2):'';
-  $('pfData').value=new Date().toISOString().split('T')[0];
-  $('pfObs').value='';
-  $('mPagarForn').dataset.id=id;
-  $('mPagarForn').classList.add('open');
-}
-function closeMPagarForn(){ $('mPagarForn').classList.remove('open'); }
-$('mPagarForn').addEventListener('click',e=>{if(e.target===e.currentTarget)closeMPagarForn();});
-function confirmPagarForn(){
-  const id=$('mPagarForn').dataset.id;
-  const val=parseFloat($('pfVal').value);
-  const dt=$('pfData').value;
-  const etapaId=$('pfEtapa').value;
-  const obs=$('pfObs').value.trim();
-  if(!val||isNaN(val)||!dt){alert('Preencha valor e data.');return;}
-  // Atualiza pago no fornecedor
-  const forns=lrF(), fi=forns.find(f=>f.id===id);
-  if(fi){ fi.pago=(fi.pago||0)+val; srF(forns); }
-  // Lança como gasto vinculado à etapa
-  const f=fi||{nome:'Fornecedor'};
-  const gastos=lrG();
-  gastos.push({id:uid(), desc:'Pagamento — '+f.nome, val, data:dt, etapaId, fornId:id, obs});
-  srG(gastos);
-  closeMPagarForn(); renderReforma();
-}
-
-// ─ GASTO ─
-function openRefGasto(){
-  refGastoEditId=null;
-  $('refGastoTitle').textContent='Novo Gasto de Reforma';
-  $('rgDesc').value=''; $('rgVal').value=''; $('rgObs').value='';
-  $('rgData').value=new Date().toISOString().split('T')[0];
-  populateRefSelects();
-  $('rgSaveBtn').textContent='Salvar Gasto';
-  $('mRefGasto').classList.add('open');
-  setTimeout(()=>$('rgDesc').focus(),60);
-}
-function openRefGastoEdit(id){
-  const g=lrG().find(g=>g.id===id); if(!g) return;
-  refGastoEditId=id;
-  $('refGastoTitle').textContent='Editar Gasto';
-  $('rgDesc').value=g.desc; $('rgVal').value=g.val; $('rgObs').value=g.obs||''; $('rgData').value=g.data;
-  populateRefSelects();
-  setTimeout(()=>{ $('rgEtapa').value=g.etapaId||''; $('rgForn').value=g.fornId||''; },30);
-  $('rgSaveBtn').textContent='Atualizar';
-  $('mRefGasto').classList.add('open');
-}
-function closeRefGasto(){ $('mRefGasto').classList.remove('open'); refGastoEditId=null; }
-$('mRefGasto').addEventListener('click',e=>{if(e.target===e.currentTarget)closeRefGasto();});
-
-function populateRefSelects(){
-  const etapas=lrE(), forns=lrF();
-  $('rgEtapa').innerHTML='<option value="">— Sem etapa —</option>'+etapas.map(e=>`<option value="${e.id}">${e.nome}</option>`).join('');
-  $('rgForn').innerHTML='<option value="">— Nenhum —</option>'+forns.map(f=>`<option value="${f.id}">${f.nome}</option>`).join('');
-}
-
-function saveRefGasto(){
-  const desc=$('rgDesc').value.trim(), val=parseFloat($('rgVal').value);
-  if(!desc||!val){alert('Preencha descrição e valor.');return;}
-  const gastos=lrG();
-  const payload={desc,val,data:$('rgData').value,etapaId:$('rgEtapa').value,fornId:$('rgForn').value,obs:$('rgObs').value.trim()};
-  if(refGastoEditId){
-    const idx=gastos.findIndex(g=>g.id===refGastoEditId);
-    if(idx>=0) gastos[idx]={...gastos[idx],...payload};
-  } else {
-    gastos.push({id:uid(),...payload});
-  }
-  srG(gastos); closeRefGasto(); renderReforma();
-}
-
-// Verificar alertas a cada 1h e ao carregar
-setInterval(verificarAlertas, 3600000);
-
-function delRefGasto(id){
-  if(!confirm('Remover este gasto?')) return;
-  srG(lrG().filter(g=>g.id!==id)); renderReforma();
-}
 </script>
 </body>
 </html>
