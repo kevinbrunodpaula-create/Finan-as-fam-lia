@@ -1181,7 +1181,7 @@ const CATS = {
   forecast: ['Pensão Aline','Trabalho Aline','Comissões Kevin','Outras entradas','Outros']
 };
 const fmt  = v => 'R$ '+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtD = s => new Date(s+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'});
+const fmtD = s => s ? new Date(s+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}) : '—';
 const $    = id => document.getElementById(id);
 const setT = (id,v) => $(id).textContent = v;
 
@@ -1289,6 +1289,7 @@ function mEntries(){
   const{y,m}=cMonth;
   return ld().filter(e=>{
     if(e.type==='fixed') return true;
+    if(!e.date) return false;
     const d=new Date(e.date+'T12:00:00');
     return d.getFullYear()===y && d.getMonth()===m;
   });
@@ -1468,7 +1469,7 @@ function renderFore(fo){
 
 // ─ CHART ─
 function renderChart(all){
-  const gw=d=>Math.min(Math.floor((new Date(d+'T12:00:00').getDate()-1)/7),4);
+  const gw=d=>d?Math.min(Math.floor((new Date(d+'T12:00:00').getDate()-1)/7),4):0;
   const inc=[0,0,0,0,0],fix=[0,0,0,0,0],va=[0,0,0,0,0],fo=[0,0,0,0,0];
   all.forEach(e=>{
     const v=Number(e.value)||0;
@@ -1652,7 +1653,7 @@ function renderGastos(){
   const daysInMonth=new Date(y,m+1,0).getDate();
 
   // Despesas variáveis do mês
-  const vars=ld().filter(e=>e.type==='variable'&&e.date&&e.date.startsWith(prefix))
+  const vars=ld().filter(e=>e.type==='variable'&&e.date&&typeof e.date==='string'&&e.date.startsWith(prefix))
     .map(e=>({...e, _fixed:false, _status:null}));
 
   // TODAS as despesas fixas (pagas, pendentes ou em atraso) — no dia de vencimento
