@@ -1221,8 +1221,9 @@ function cycleVarStatus(id){
     const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
     vs[id]=cycle[cur]||'pending';
     localStorage.setItem('fc_varstatus',JSON.stringify(vs));
-  }catch(e){console.warn(e);}
-  render();
+    // Force re-render after storage write
+    setTimeout(()=>render(), 10);
+  }catch(e){console.warn(e);render();}
 };
   fs[k]=cycle[cur]||'pending';
   sdfs(fs); render(); syncToCloud();
@@ -1313,7 +1314,7 @@ function render(){
   const tI=inc.reduce((s,e)=>s+(Number(e.value)||0),0), tF=fix.reduce((s,e)=>s+(Number(e.value)||0),0),
         tV=va.reduce((s,e)=>s+(Number(e.value)||0),0),  tFo=fo.reduce((s,e)=>s+(Number(e.value)||0),0);
   const tFeff=fix.filter(e=>{const st=getStatus(e.id,y,m);return st==='paid'||st==='late-paid'||st==='overdue';}).reduce((s,e)=>s+e.value,0);
-  const saldo=tI+tFo-tFeff-tV, tIn=tI+tFo;
+  const saldo=tI+tFo-tF-tV, tIn=tI+tFo; // saldo usa tF (total fixas) para projeção completa
   setT('kRec',fmt(tI)); setT('kRecS',inc.length+' lanc.');
   $('pRec').style.width = tIn>0?Math.min(100,tI/tIn*100)+'%':'0%';
   setT('kPrev',fmt(tFo)); setT('kPrevS',fo.length+' pend.');
@@ -1421,7 +1422,7 @@ function renderFix(fix){
 }
 
 // ─ VARIABLE ─
-function _getVS(id){try{return(JSON.parse(localStorage.getItem('fc_varstatus'))||{})[id]||'pending';}catch{return'pending';}}
+function _getVS(id){try{const vs=JSON.parse(localStorage.getItem('fc_varstatus'));return(vs&&vs[id])||'pending';}catch{return'pending';}}
 function renderVar(va){
   const el=$('varList');
   if(!va.length){el.innerHTML='<div class="empty">Sem despesas variáveis.</div>';}
