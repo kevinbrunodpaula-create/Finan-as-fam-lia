@@ -1205,6 +1205,10 @@ function getStatus(id,y,m){
   }
   return 'pending';
 }
+function handleFixStatus(btn){
+  const id = btn.getAttribute('data-fixid');
+  if(id) cycleStatus(id);
+}
 function cycleStatus(id){
   const fs=ldfs(), k=fsKey(id,cMonth.y,cMonth.m);
   const cur=getStatus(id,cMonth.y,cMonth.m);
@@ -1214,17 +1218,20 @@ function getVarStatus(id){
   const vs=ldvs();
   return vs[id]||'pending';
 }
-function cycleVarStatus(id){
+function handleVarStatus(btn){
+  const id = btn.getAttribute('data-varid');
+  if(!id) return;
   try{
-    const vs=JSON.parse(localStorage.getItem('fc_varstatus'))||{};
-    const cur=vs[id]||'pending';
-    const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
-    vs[id]=cycle[cur]||'pending';
-    localStorage.setItem('fc_varstatus',JSON.stringify(vs));
-    // Force re-render after storage write
-    setTimeout(()=>render(), 10);
-  }catch(e){console.warn(e);render();}
-};
+    const stored = localStorage.getItem('fc_varstatus');
+    const vs = stored ? JSON.parse(stored) : {};
+    const cur = vs[id] || 'pending';
+    const cycle = {'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
+    vs[id] = cycle[cur] || 'pending';
+    localStorage.setItem('fc_varstatus', JSON.stringify(vs));
+  }catch(ex){console.warn('cycleVarStatus error:', ex);}
+  render();
+}
+function cycleVarStatus(id){ handleVarStatus({getAttribute:()=>id}); };
   fs[k]=cycle[cur]||'pending';
   sdfs(fs); render(); syncToCloud();
 }
@@ -1400,7 +1407,7 @@ function renderFix(fix){
           return `<div class="fix-item">
             <div class="fix-info"><div class="fix-desc">${e.desc}</div><div class="fix-meta">Vence dia ${e.dayOfMonth} · ${e.category}</div></div>
             <div class="fix-amt ${st}">− ${fmt(e.value)}</div>
-            <button class="status-btn ${cls[st]}" onclick="cycleStatus('${e.id}')">${lbl[st]}</button>
+            <button class="status-btn ${cls[st]}" data-fixid="${e.id}" onclick="handleFixStatus(this)">${lbl[st]}</button>
             <button class="txi-btn edit" onclick="openEditModal('${e.id}')" title="Editar" style="margin-left:4px">✎</button>
           </div>`;
         }).join('');
@@ -1438,7 +1445,7 @@ function renderVar(va){
           return `<div class="fix-item">
             <div class="einfo"><div class="edesc">${e.desc||'—'}</div><div class="emeta">${fmtD(e.date)} · ${e.category||'—'}</div></div>
             <div class="eamt eao" style="font-size:12px">− ${fmt(Number(e.value)||0)}</div>
-            <button class="status-btn ${cls[st]}" onclick="cycleVarStatus('${e.id}')">${lbl[st]}</button>
+            <button class="status-btn ${cls[st]}" data-varid="${e.id}" onclick="handleVarStatus(this)">${lbl[st]}</button>
             <div class="txi-actions" style="margin-left:4px">
               <button class="txi-btn edit" onclick="openEditModal('${e.id}')" title="Editar">✎</button>
               <button class="txi-btn del"  onclick="delEntry('${e.id}')"       title="Excluir">✕</button>
