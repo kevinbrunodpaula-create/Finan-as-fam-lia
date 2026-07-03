@@ -1211,8 +1211,10 @@ function handleFixStatus(btn){
 function cycleStatus(id){
   const fs=ldfs(), k=fsKey(id,cMonth.y,cMonth.m);
   const cur=getStatus(id,cMonth.y,cMonth.m);
-  const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'}
-
+  const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
+  fs[k]=cycle[cur]||'pending';
+  sdfs(fs); render(); syncToCloud();
+}
 function getVarStatus(id){
   const vs=ldvs();
   return vs[id]||'pending';
@@ -1220,19 +1222,18 @@ function getVarStatus(id){
 function handleVarStatus(btn){
   const id = btn.getAttribute('data-varid');
   if(!id) return;
-  try{
-    const stored = localStorage.getItem('fc_varstatus');
-    const vs = stored ? JSON.parse(stored) : {};
-    const cur = vs[id] || 'pending';
-    const cycle = {'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
-    vs[id] = cycle[cur] || 'pending';
-    localStorage.setItem('fc_varstatus', JSON.stringify(vs));
-  }catch(ex){console.warn('cycleVarStatus error:', ex);}
-  render();
+  const vs=ldvs();
+  const cur=vs[id]||'pending';
+  const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
+  vs[id]=cycle[cur]||'pending';
+  sdvs(vs); render();
 }
-function cycleVarStatus(id){ handleVarStatus({getAttribute:()=>id}); };
-  fs[k]=cycle[cur]||'pending';
-  sdfs(fs); render(); syncToCloud();
+function cycleVarStatus(id){
+  const vs=ldvs();
+  const cur=vs[id]||'pending';
+  const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
+  vs[id]=cycle[cur]||'pending';
+  sdvs(vs); render();
 }
 
 // ─ INIT ─
