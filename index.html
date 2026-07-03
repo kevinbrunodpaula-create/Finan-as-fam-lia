@@ -162,7 +162,7 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .lcol,.rcol{display:flex;flex-direction:column;gap:18px}
 
 /* PANEL */
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:15px;overflow:hidden}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:15px}
 .ph{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--border)}
 .ptitle{font-size:13px;font-weight:700}
 .pact{padding:5px 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;border:1px solid}
@@ -192,9 +192,8 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .txi-actions{display:flex;gap:5px;margin-left:6px}
 .txi-btn{width:24px;height:24px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all .1s}
 .txi-btn:hover{border-color:var(--sub);color:var(--text)}
-.collapsible{overflow:hidden;transition:max-height .3s ease}
-.collapsible.collapsed{max-height:0!important}
-.collapsible.expanded{max-height:9999px}
+.collapsible.collapsed{max-height:0;overflow:hidden}
+.collapsible.expanded{max-height:none;overflow:visible}
 .toggle-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .toggle-btn:hover{border-color:var(--sub);color:var(--text)}
 .txi-btn.del:hover{border-color:var(--red);color:var(--red)}
