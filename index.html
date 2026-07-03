@@ -1215,24 +1215,30 @@ function cycleStatus(id){
   fs[k]=cycle[cur]||'pending';
   sdfs(fs); render(); syncToCloud();
 }
-function getVarStatus(id){
-  const vs=ldvs();
-  return vs[id]||'pending';
+// Var status: keyed by id_YYYY_MM (same pattern as fixed)
+function vsKey(id,y,m){ return id+'_'+y+'_'+String(m+1).padStart(2,'0'); }
+function getVarStatus(id,y,m){
+  const vs=ldvs(), k=vsKey(id,y,m), st=vs[k];
+  if(st) return st;
+  // default: pending (variáveis não têm lógica de atraso automático)
+  return 'pending';
 }
 function handleVarStatus(btn){
-  const id = btn.getAttribute('data-varid');
+  const id=btn.getAttribute('data-varid');
   if(!id) return;
-  const vs=ldvs();
-  const cur=vs[id]||'pending';
+  const {y,m}=cMonth;
+  const vs=ldvs(), k=vsKey(id,y,m);
+  const cur=vs[k]||'pending';
   const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
-  vs[id]=cycle[cur]||'pending';
+  vs[k]=cycle[cur]||'pending';
   sdvs(vs); render();
 }
 function cycleVarStatus(id){
-  const vs=ldvs();
-  const cur=vs[id]||'pending';
+  const {y,m}=cMonth;
+  const vs=ldvs(), k=vsKey(id,y,m);
+  const cur=vs[k]||'pending';
   const cycle={'pending':'paid','paid':'late-paid','late-paid':'overdue','overdue':'pending'};
-  vs[id]=cycle[cur]||'pending';
+  vs[k]=cycle[cur]||'pending';
   sdvs(vs); render();
 }
 
@@ -1429,7 +1435,7 @@ function renderFix(fix){
 }
 
 // ─ VARIABLE ─
-function _getVS(id){try{const vs=JSON.parse(localStorage.getItem('fc_varstatus'));return(vs&&vs[id])||'pending';}catch{return'pending';}}
+function _getVS(id){try{const {y,m}=cMonth;const k=id+'_'+y+'_'+String(m+1).padStart(2,'0');const vs=JSON.parse(localStorage.getItem('fc_varstatus'));return(vs&&vs[k])||'pending';}catch{return'pending';}}
 function renderVar(va){
   const el=$('varList');
   if(!va.length){el.innerHTML='<div class="empty">Sem despesas variáveis.</div>';}
@@ -1455,7 +1461,7 @@ function renderVar(va){
     }).join('');
   }
   const tot=va.reduce((s,e)=>s+(Number(e.value)||0),0);
-  const paidVar=va.filter(e=>{ const st=_getVS(e.id); return st==='paid'||st==='late-paid'; }).length;
+  const paidVar=va.filter(e=>{ const st=_getVS(e.id); return st==='paid'||st==='late-paid'; }).length; // _getVS now uses cMonth internally
   setT('varTotal',fmt(tot));
   setT('varCount',paidVar+'/'+va.length+' pagos');
 }
